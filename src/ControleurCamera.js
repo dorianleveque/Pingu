@@ -132,6 +132,7 @@ class ControleurCamera {
 	}
 
 	mouseMove(event) {
+		/*
 		event.preventDefault() ;
 		this.mx  = (event.clientX/window.innerWidth)*2-1 ; 
 		this.my  = (-event.clientY/window.innerHeight)*2+1 ;
@@ -141,6 +142,7 @@ class ControleurCamera {
 		if(this.mdx >  1 && this.mx > 0) {this.aDroite = true ;  this.aGauche = false} else
 		if(this.mdx < -1 && this.mx < 0){this.aDroite = false ; this.aGauche = true} else
 		{this.aDroite = false ; this.aGauche = false};
+		*/
 		
 		/*if(event.movementX > 5){
 			controls.aDroite = true ;
