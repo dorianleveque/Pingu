@@ -1,4 +1,4 @@
-import Appli from "./src/projet.js"
+import Appli from "./code/src/projet.js"
 
 var sim = new Appli();
 sim.init({
