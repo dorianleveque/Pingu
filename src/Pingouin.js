@@ -28,6 +28,16 @@ export default class Pingouin extends Acteur {
 	seek(cible, coef) {
 		var steer = new THREE.Vector3(0, 0, 0);
 		// Code à compléter
+		let PC = new THREE.Vector3();
+		PC.subVectors(cible, this.position);
+		let vd = PC.divideScalar(PC.lengthSq()); 
+		vd.multiplyScalar(coef); // TODO: Verification à faire
+		let vdMoinsVC = new THREE.Vector3();
+		vdMoinsVC.subVectors(vd, this.vitesse);
+		steer.copy(vdMoinsVC);
+		steer.divideScalar(vdMoinsVC.lengthSq());
+		//steer.multiplyScalar(vdMoinsVC.lengthSq()); // TODO: Multiplier par norme(vdMoinsVc) ou Fm
+		console.log(steer);
 		this.applyforce(steer);
 	}
 
@@ -72,7 +82,9 @@ export default class Pingouin extends Acteur {
 						if (coef >= 0.1) {
 							this.seek(act.objet3d.position, 1 - coef);
 						} else {
+							console.log("Delele acteur: ", act);
 							this.sim.delActeur(act);
+							console.log(act);
 						}
 						break;
 					case "Humain": // Humain
