@@ -26,50 +26,47 @@ export default class Acteur {
 
 	/**
 	 * Modification de la position de l'acteur
-	 * @param {Number} x coordonnée x
-	 * @param {Number} y coordonnée y
-	 * @param {Number} z coordonnée z
+	 * @param {THREE.Vector3} vector vecteur
 	 */
-	setPosition(x, y, z) {
+	set position (vector) {
 		if (this.objet3d)
-			this.objet3d.position.set(x, y, z);
+			this.objet3d.position.set(vector.x, vector.y, vector.z);
 	}
 
 	/**
-	 * Retourne la position de l'Acteur
-	 * @return THREE.Vector3
+	 * Retourne le vecteur position de l'acteur
 	 */
-	getPosition() {
+	get position() {
 		if (this.objet3d)
 			return this.objet3d.position;
 	}
 
 	/**
 	 * Modification de l'orientation de l'acteur
-	 * @param {*} cap 
+	 * @param {Number} cap 
 	 */
-	setOrientation(cap) {
+	set orientation(cap) {
 		if (this.objet3d)
 			this.objet3d.rotation.y = cap;
 	}
 
-	getOrientation() {
+	get orientation() {
 		if (this.objet3d)
 			return this.objet3d.rotation.y;
 	}
 
 	/**
 	 * Modification de la visibilité de l'acteur
-	 * @param {*} v 
+	 * @param {Boolean} v 
 	 */
-	setVisible(v) {
+	set visible(v) {
 		if (this.objet3d)
-			this.objet3d.isVisible = v;
+			this.objet3d.visible = v;
 	}
 
-	isVisible() {
+	get visible() {
 		if (this.objet3d)
-			return this.objet3d.isVisible;
+			return this.objet3d.visible;
 	}
 
 	actualiser(dt) { }

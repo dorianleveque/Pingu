@@ -49,9 +49,10 @@ export default class Pingouin extends Acteur {
 			var x = this.objet3d.position.x;
 			var z = this.objet3d.position.z;
 			this.coordPhephe.push([x, z]);
-			var phephe = new Pheromone(this.sim, this, 3);
-			phephe.setPosition(x, 0, z);
-			this.sim.addActeur(phephe);
+			
+			const pheromone = new Pheromone(this.sim, this, 3);
+			pheromone.position = this.position;
+			this.sim.addActeur(pheromone);
 		}
 	}
 

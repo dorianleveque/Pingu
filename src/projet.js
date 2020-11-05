@@ -49,7 +49,7 @@ export default class Appli extends Sim {
 			const dlt = this.largeurTerrain / 2;
 			const dpt = this.profondeurTerrain / 2;
 			const [x, z] = getRandCoord(-dlt, dlt, -dpt, dpt);
-			acteur.setPosition(x, 0, z);
+			acteur.position = new THREE.Vector3(x, 0, z);
 			this.addActeur(acteur)
 		}
 	}
