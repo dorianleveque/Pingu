@@ -36,21 +36,9 @@ export function creerBoite(largeur, hauteur, profondeur, couleur = 0xffaaaa, tex
 }
 
 /**
- * Créer une sphere
- * @param {Number} rayon Rayon de la sphere
- * @param {Number} couleur Couleur de la sphere
- * @param {String} texture Nom de la texture
- */
-export function creerSphere(rayon, couleur = 0xffaaaa, texture = null) {
-	const geo = new THREE.SphereGeometry(rayon, 32, 32);
-	const mat = new THREE.MeshStandardMaterial({ color: couleur });
-	return new THREE.Mesh(geo, mat);
-}
-
-/**
  * Creer un tetrahedre
- * @param {Number} rayon rayon du tetrahedre
- * @param {Number} detail nombre de polygone
+ * @param {Number} rayon Rayon du tetrahedre
+ * @param {Number} detail Nombre de polygone
  * @param {Number} couleur Couleur du tetrahedre
  */
 export function creerTetrahedre(rayon, detail, couleur = 0xffaaaa) {
@@ -59,7 +47,28 @@ export function creerTetrahedre(rayon, detail, couleur = 0xffaaaa) {
 	return new THREE.Mesh(geo, mat);
 }
 
+/**
+ * Creer une sphere
+ * @param {Number} rayon Rayon de la sphere
+ * @param {Number} couleur Couleur de la sphère
+ * @param {Number} opacite Opacite de la sphère
+ */
+export function creerSphere(rayon, couleur = 0xffaaaa, opacite = 1) {
+	const geo = new THREE.SphereGeometry(rayon, 32, 32);
+	const mat = new THREE.MeshLambertMaterial({ color: couleur, transparent: true, opacity: opacite });
+	return new THREE.Mesh(geo, mat);
+}
 
+/**
+ * Creer un cylindre
+ * @param {Number} rayonHaut 
+ * @param {Number} rayonBas 
+ * @param {Number} hauteur 
+ * @param {Number} nbSegments 
+ * @param {Number} hauteurSegment 
+ * @param {Number} cylindreOuvert 
+ * @param {Number} couleur 
+ */
 export function creerCylindre(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert = false, couleur = 0xffaaaa) {
 	const geo = new THREE.CylinderGeometry(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert);
 	const mat = new THREE.MeshBasicMaterial({ color: couleur });
