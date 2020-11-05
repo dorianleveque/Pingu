@@ -94,6 +94,39 @@ class Rocher extends Acteur {
 }
 
 
+class Pheromone {
+
+	constructor(nom, sim, options = {}) {
+		super(nom, sim);
+		var rayon   = data.rayon || 0.1 ;  
+		var couleur = data.couleur || 0x0000ff ;
+		var opa = data.opacity || 1;
+		
+		var sph = creerSphereTransparente(nom,{rayon:rayon, couleur:couleur, opacity:opa}) ;
+		this.setObjet3d(sph) ;
+	
+		this.counter = 0;
+	}
+
+	actualiser(dt){
+		this.counter = this.counter + 1 ;
+		if(this.counter >= 100 && this.counter <= 150){
+				this.data.nimbus = 2;
+				this.objet3d.material.opacity = 0.5;
+		}
+		else if(this.counter >= 150 && this.counter <= 300){
+				this.data.nimbus = 1;
+				this.objet3d.material.opacity = 0.15;
+		}
+		else if(this.counter >= 300){
+				this.sim.delActeur(this);
+		}
+	}
+
+}
+
+
+
 // ========================================================================================================
 
 // La classe décrivant des pingouins
@@ -103,52 +136,107 @@ class Pingouin extends Acteur {
 
 	constructor(nom, sim, options = {}) {
 		super(nom, sim);
-		this.target = new THREE.Vector3();
-		this.vitesse = new THREE.Vector3(1, 0, 0);
+		this.vitesse = new THREE.Vector3(0, 0, 0);
+		this.acceleration = new THREE.Vector3(0, 0, 0);
+		this.cible = new THREE.Vector3(0, 0, 0);
 		this.deplacement = new THREE.Vector3();
-		this.vitesseMax = 1;
+		this.vitesseMax = 0.1;
+		this.forceMax = 0.01;
+		this.refVect = THREE.Vector3(0, 0, 1);
+		this.toBeEaten = {};
+		this.coordPhephe = [];
+
 		this.setObjet3d(chargerObj("tux1", "assets/obj/pingouin/penguin.obj", "assets/obj/pingouin/penguin.mtl"));
 	}
 
-	getSpeedSquared() {
-		return this.vitesse.lengthSq();
+	applyforce(f) {
+		this.acceleration.add(f);
+	}
+
+	seek(cible, coef) {
+		var steer = new THREE.Vector3(0, 0, 0);
+		// Code à compléter
+		this.applyforce(steer);
+	}
+
+	flee(cible, coef) {
+		var steer = new THREE.Vector3(0, 0, 0);
+		// Code à compléter
+		this.applyforce(steer.negate());
+	}
+
+	orientation(cible) {
+		var dc = Math.sqrt(Math.pow(cible.z - this.objet3d.position.z, 2) + Math.pow(cible.x - this.objet3d.position.x, 2));
+		var num = cible.z - this.objet3d.position.z;
+		var dirAngle = Math.acos(num / dc);
+		return dirAngle;
+	}
+
+	creerPheromone() {
+		if (Math.random() < 0.02) {
+			var x = this.objet3d.position.x;
+			var z = this.objet3d.position.z;
+			this.coordPhephe.push([x, z]);
+			var phephe = new Pheromone("phe" + this.coordPhephe.length, { parent: this, nimbus: 3 }, this.sim);
+			phephe.setPosition(x, 0, z);
+			this.sim.addActeur(phephe);
+		}
+	}
+
+	outOfBound() {
+		var pos = this.objet3d.position;
+		return pos.x < -50 || pos.x > 50 || pos.z < -50 || pos.z > 50;
 	}
 
 	actualiser(dt) {
-		//const t = this.sim.horloge;
-		//const previousPos = this.getPosition();
-		/*this.setOrientation(t);
-		this.setPosition(previousPos.x + random(0.5), 0.0, previousPos.z + random(0.5));
-*/
-		//this.target = new THREE.Vector3(random(0.5), 0.0, random(0.5))
-
-		if (this.getSpeedSquared() > (this.vitesseMax * this.vitesseMax)) {
-			this.vitesse.normalize();
-			this.vitesse.multiplyScalar(this.vitesseMax);
+    var coef = 0;
+    for (const act of this.sim.acteurs){
+    	coef = act.isInNimbus(this);
+    	if (this!=act && coef>0) {
+    	    switch (act.nom[0]){
+            case "h":
+                if (coef>=0.1) {
+                    this.seek(act.objet3d.position,1-coef);
+                } else{
+                    this.sim.delActeur(act);
+                }
+                break;
+	    case "t":
+		if (coef<0.2) {
+		    this.flee(act.objet3d.position,1-coef);
 		}
-
-		// calculate displacement
-		this.deplacement.copy(this.vitesse).multiplyScalar(dt);
-
-		// calculate target position
-		const position = this.getPosition();
-		this.target.copy(position).add(this.deplacement);
-
-		// update the orientation if the vehicle has a non zero velocity
-		if (this.getSpeedSquared() > 0.00000001) {
-			this.lookAt(this.target);
+		break;
+	    case "c":
+		var camFeet = act.objet3d.position.clone();
+		camFeet.y = 0;
+		this.flee(camFeet,1);
+		break;
+	    case "p":
+		if (coef!=0){
+		    this.seek(act.objet3d.position,0.05);
 		}
+		break;
+            default:
+                break;
+            }
+    	}
+    }
 
-		// update position
-		position.copy(this.target);
-		this.setPosition(position.x, position.y, position.z);
-	}
+    if (this.acceleration.length()==0 && (this.outOfBound() || Math.random()<0.01)){
+      	var [x,z] = getRandCoord(-50,50,-50,50);
+        this.cible.set(x,0,z);
+	    this.seek(this.cible,1);
+    }
 
-	lookAt(target) {
-		/*targetDirection.subVectors(target, this.getPosition()).normalize();
-		this.rotation.lookAt(this.forward, targetDirection, this.up);*/
-		return this;
-
+    this.acceleration.clampLength(0,this.forceMax);
+    this.vitesse.add(this.acceleration);
+    this.vitesse.clampLength(0,this.vitesseMax);
+    this.objet3d.position.add(this.vitesse);
+    var pp = this.objet3d.position.clone();
+    pp.add(this.vitesse);
+    this.objet3d.lookAt(pp);
+    this.acceleration.multiplyScalar(0);
+    this.creerPheromone();
 	}
 }
 

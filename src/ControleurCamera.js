@@ -132,7 +132,7 @@ class ControleurCamera {
 	}
 
 	mouseMove(event) {
-		event.preventDefault() ;
+		/*event.preventDefault() ;
 		this.mx  = (event.clientX/window.innerWidth)*2-1 ; 
 		this.my  = (-event.clientY/window.innerHeight)*2+1 ;
 		this.mdx = event.movementX ; 
@@ -152,7 +152,7 @@ class ControleurCamera {
 	}
 
 	mouseDown(event) {
-		event.preventDefault();
+		/*event.preventDefault();
 		this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
 		this.mouse.y = (-event.clientY / window.innerHeight) * 2 + 1;
 		this.raycaster.setFromCamera(this.mouse, this.camera);
@@ -166,9 +166,8 @@ class ControleurCamera {
 			this.origin.applyMatrix4(this.world);
 			this.ext.applyMatrix4(this.world);
 	
-		}
+		}*/
 	}
-
 }
 
 
