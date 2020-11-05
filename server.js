@@ -6,7 +6,7 @@ const port = 3000;
 const app = express();
 
 // dossier à servir 
-app.use(express.static('./MASTER/code/'));
+app.use(express.static('.'));
 
 app.listen(port, host, () => {
   console.log(`Server listen on ${host}:${port}`);

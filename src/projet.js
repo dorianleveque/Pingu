@@ -29,7 +29,7 @@ export default class Appli extends Sim {
 
 		this.placerAleatoirement(nbHerbe, Herbe);
 		this.placerAleatoirement(nbPingouin, Pingouin);
-		this.placerAleatoirement(nbRocher, Rocher, this.RocherCreationCallback);
+		//this.placerAleatoirement(nbRocher, Rocher, this.RocherCreationCallback);
 
 		/*const rocher = new Rocher("rocher", this, { largeur: 3, profondeur: 2, hauteur: 1.5 });
 		rocher.setPosition(-5, 0.75, 5);
@@ -73,7 +73,7 @@ class Herbe extends Acteur {
 		super(nom, sim);
 		this.setObjet3d(creerSphere(
 			options.rayon || 0.25,
-			options.couleur
+			options.couleur || 0x78f03c
 		));
 	}
 
