@@ -6,8 +6,8 @@ import { getRandCoord } from "./utils.js"
 
 export default class Pingouin extends Acteur {
 
-	constructor(nom, sim, options = {}) {
-		super(nom, sim);
+	constructor(sim, options = {}) {
+		super(sim);
 		this.vitesse = new THREE.Vector3(0, 0, 0);
 		this.acceleration = new THREE.Vector3(0, 0, 0);
 		this.cible = new THREE.Vector3(0, 0, 0);
@@ -49,7 +49,7 @@ export default class Pingouin extends Acteur {
 			var x = this.objet3d.position.x;
 			var z = this.objet3d.position.z;
 			this.coordPhephe.push([x, z]);
-			var phephe = new Pheromone("phe" + this.coordPhephe.length, this.sim, this, 3);
+			var phephe = new Pheromone(this.sim, this, 3);
 			phephe.setPosition(x, 0, z);
 			this.sim.addActeur(phephe);
 		}
@@ -62,28 +62,29 @@ export default class Pingouin extends Acteur {
 
 	actualiser(dt) {
 		var coef = 0;
-		for (const act of this.sim.acteurs) {
+		this.sim.acteurs.forEach(act => {
 			coef = act.isInNimbus(this);
 			if (this != act && coef > 0) {
-				switch (act.nom[0]) {
-					case "h": // Herbe
+
+				switch (act.constructor.name) {
+					case "Herbe": // Herbe
 						if (coef >= 0.1) {
 							this.seek(act.objet3d.position, 1 - coef);
 						} else {
 							this.sim.delActeur(act);
 						}
 						break;
-					case "t": // Humain
+					case "Humain": // Humain
 						if (coef < 0.2) {
 							this.flee(act.objet3d.position, 1 - coef);
 						}
 						break;
-					case "c":
+					/*case "c":
 						var camFeet = act.objet3d.position.clone();
 						camFeet.y = 0;
 						this.flee(camFeet, 1);
-						break;
-					case "p":
+						break;*/
+					case "Pingouin":
 						if (coef != 0) {
 							this.seek(act.objet3d.position, 0.05);
 						}
@@ -92,7 +93,7 @@ export default class Pingouin extends Acteur {
 						break;
 				}
 			}
-		}
+		})
 
 		if (this.acceleration.length() == 0 && (this.outOfBound() || Math.random() < 0.01)) {
 			const [x, z] = getRandCoord(-50, 50, -50, 50);

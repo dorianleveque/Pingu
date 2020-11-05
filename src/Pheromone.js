@@ -3,8 +3,8 @@ import { creerSphere } from "./prims.js"
 
 export default class Pheromone extends Acteur {
 
-	constructor(nom, sim, parent, nimbus = 3, options = {}) {
-		super(nom, sim);
+	constructor(sim, parent, nimbus = 3, options = {}) {
+		super(sim);
 		this.parent = parent;
 		this.nimbus = nimbus;
 		this.setObjet3d(creerSphere(

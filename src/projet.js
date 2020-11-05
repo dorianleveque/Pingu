@@ -32,9 +32,6 @@ export default class Appli extends Sim {
 		this.placerAleatoirement(nbPingouin, Pingouin);
 		//this.placerAleatoirement(nbRocher, Rocher, this.RocherCreationCallback);
 
-		/*const rocher = new Rocher("rocher", this, { largeur: 3, profondeur: 2, hauteur: 1.5 });
-		rocher.setPosition(-5, 0.75, 5);
-		this.addActeur(rocher);*/
 	}
 
 	/**
@@ -45,9 +42,8 @@ export default class Appli extends Sim {
 	 */
 	placerAleatoirement(nbMax, classe, creationCallback = (classe, index) => { }) {
 		for (let i = 0; i < nbMax; i++) {
-			const { name, options } = creationCallback(classe, i) || { name: "", options: {} }
-
-			const acteur = new classe(`${name || classe.name}${i}`, this, options || {});
+			const options = creationCallback(classe, i) || {}
+			const acteur = new classe(this, options);
 
 			// le terrain généré est centré
 			const dlt = this.largeurTerrain / 2;
@@ -71,8 +67,8 @@ export default class Appli extends Sim {
 
 class Herbe extends Acteur {
 
-	constructor(nom, sim, options = {}) {
-		super(nom, sim);
+	constructor(sim, options = {}) {
+		super(sim);
 		this.setObjet3d(creerSphere(
 			options.rayon || 0.25,
 			options.couleur || 0x78f03c
@@ -85,8 +81,8 @@ class Herbe extends Acteur {
 // ===============================
 class Rocher extends Acteur {
 
-	constructor(nom, sim, options = {}) {
-		super(nom, sim);
+	constructor(sim, options = {}) {
+		super(sim);
 		this.setObjet3d(creerTetrahedre(
 			options.rayon || 0.5,
 			options.detail || 0,

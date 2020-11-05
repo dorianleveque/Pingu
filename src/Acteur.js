@@ -8,12 +8,9 @@ import Sim from "./Sim.js";
 export default class Acteur {
 
 	/**
-	 * 
-	 * @param {String} nom nom de l'acteur
 	 * @param {Sim} sim simulation
 	 */
-	constructor(nom, sim) {
-		this.nom = nom;
+	constructor(sim) {
 		this.objet3d = null;
 		this.sim = sim;
 	}
