@@ -49,7 +49,7 @@ export default class Pingouin extends Acteur {
 			var x = this.objet3d.position.x;
 			var z = this.objet3d.position.z;
 			this.coordPhephe.push([x, z]);
-			
+
 			const pheromone = new Pheromone(this.sim, this, 3);
 			pheromone.position = this.position;
 			this.sim.addActeur(pheromone);
@@ -85,11 +85,11 @@ export default class Pingouin extends Acteur {
 						camFeet.y = 0;
 						this.flee(camFeet, 1);
 						break;*/
-					case "Pingouin":
+					/*case "Pingouin":
 						if (coef != 0) {
 							this.seek(act.objet3d.position, 0.05);
 						}
-						break;
+						break;*/
 					default:
 						break;
 				}
