@@ -51,7 +51,8 @@ export default class Appli extends Sim {
 			// le terrain généré est centré
 			const dlt = this.largeurTerrain / 2;
 			const dpt = this.profondeurTerrain / 2;
-			acteur.setPosition(randomRange(-dlt, dlt), 0, randomRange(-dpt, dpt));
+			const [x, z] = getRandCoord(-dlt, dlt, -dpt, dpt);
+			acteur.setPosition(x, 0, z);
 			this.addActeur(acteur)
 		}
 	}
@@ -96,14 +97,15 @@ class Rocher extends Acteur {
 
 class Pheromone extends Acteur {
 
-	constructor(nom, sim, options = {}) {
+	constructor(nom, sim, parent, nimbus = 3, options = {}) {
 		super(nom, sim);
-		var rayon = data.rayon || 0.1;
-		var couleur = data.couleur || 0x0000ff;
-		var opa = data.opacity || 1;
-
-		var sph = creerSphereTransparente(nom, { rayon: rayon, couleur: couleur, opacity: opa });
-		this.setObjet3d(sph);
+		this.parent = parent;
+		this.nimbus = nimbus;
+		this.setObjet3d(creerSphere(
+			options.rayon || 0.1,
+			options.couleur || 0x0000ff,
+			options.opacity || 1
+		));
 
 		this.counter = 0;
 	}
@@ -111,11 +113,11 @@ class Pheromone extends Acteur {
 	actualiser(dt) {
 		this.counter = this.counter + 1;
 		if (this.counter >= 100 && this.counter <= 150) {
-			this.data.nimbus = 2;
+			this.nimbus = 2;
 			this.objet3d.material.opacity = 0.5;
 		}
 		else if (this.counter >= 150 && this.counter <= 300) {
-			this.data.nimbus = 1;
+			this.nimbus = 1;
 			this.objet3d.material.opacity = 0.15;
 		}
 		else if (this.counter >= 300) {
@@ -177,7 +179,7 @@ class Pingouin extends Acteur {
 			var x = this.objet3d.position.x;
 			var z = this.objet3d.position.z;
 			this.coordPhephe.push([x, z]);
-			var phephe = new Pheromone("phe" + this.coordPhephe.length, { parent: this, nimbus: 3 }, this.sim);
+			var phephe = new Pheromone("phe" + this.coordPhephe.length, this.sim, this, 3);
 			phephe.setPosition(x, 0, z);
 			this.sim.addActeur(phephe);
 		}
@@ -223,7 +225,7 @@ class Pingouin extends Acteur {
 		}
 
 		if (this.acceleration.length() == 0 && (this.outOfBound() || Math.random() < 0.01)) {
-			var [x, z] = getRandCoord(-50, 50, -50, 50);
+			const [x, z] = getRandCoord(-50, 50, -50, 50);
 			this.cible.set(x, 0, z);
 			this.seek(this.cible, 1);
 		}
