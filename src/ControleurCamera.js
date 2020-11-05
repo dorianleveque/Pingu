@@ -13,7 +13,7 @@ export default class ControleurCamera {
 		this.angle = 0.0;
 		this.direction = new THREE.Vector3(1, 0, 0);
 		this.cible = new THREE.Vector3(2, 1.7, 5);
-		this.vitesse = 2.0;
+		this.vitesse = 8.0;
 		this.vitesseAngulaireMax = 0.05;
 		this.tauxRotation = 0.0;
 
