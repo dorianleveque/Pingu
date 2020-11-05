@@ -47,16 +47,6 @@ class Acteur {
 			return this.objet3d.position;
 	}
 
-	/*setVitesse(vitesse) {
-		if (this.objet3d)
-			this.vitesse = vitesse;
-	}
-
-	getVitesse() {
-		if (this.objet3d)
-			return this.vitesse;
-	}*/
-
 	/**
 	 * Modification de l'orientation de l'acteur
 	 * @param {*} cap 
@@ -86,6 +76,15 @@ class Acteur {
 	}
 
 	actualiser(dt) { }
+
+	isInNimbus(act) {
+		var distance = this.objet3d.position.distanceTo(act.objet3d.position);
+		/*var parent = this.data.parent || null;
+		if (act == parent || distance >= this.data.nimbus) {
+			return 0;
+		}*/
+		return distance /// this.data.nimbus;
+	}
 }
 
 export default Acteur;
