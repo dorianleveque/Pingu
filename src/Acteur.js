@@ -71,7 +71,7 @@ export default class Acteur {
 
 	actualiser(dt) { }
 
-	isInNimbus(act) {
+	isInNimbus(act) { // TODO: A finir (le param nimbus n'existe pas)
 		const distance = this.objet3d.position.distanceTo(act.objet3d.position);
 		const parent = this.parent || null;
 		if (act == parent || distance >= this.nimbus) {

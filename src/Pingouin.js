@@ -27,17 +27,18 @@ export default class Pingouin extends Acteur {
 
 	seek(cible, coef) {
 		var steer = new THREE.Vector3(0, 0, 0);
-		// Code à compléter
+
 		let PC = new THREE.Vector3();
 		PC.subVectors(cible, this.position);
-		let vd = PC.divideScalar(PC.lengthSq()); 
+		let vd = PC.divideScalar(PC.length());
 		vd.multiplyScalar(coef); // TODO: Verification à faire
 		let vdMoinsVC = new THREE.Vector3();
 		vdMoinsVC.subVectors(vd, this.vitesse);
 		steer.copy(vdMoinsVC);
-		steer.divideScalar(vdMoinsVC.lengthSq());
+		steer.divideScalar(vdMoinsVC.length());
 		//steer.multiplyScalar(vdMoinsVC.lengthSq()); // TODO: Multiplier par norme(vdMoinsVc) ou Fm
-		console.log(steer);
+		//console.log(steer);
+
 		this.applyforce(steer);
 	}
 
@@ -59,7 +60,7 @@ export default class Pingouin extends Acteur {
 			var x = this.objet3d.position.x;
 			var z = this.objet3d.position.z;
 			this.coordPhephe.push([x, z]);
-			
+
 			const pheromone = new Pheromone(this.sim, this, 3);
 			pheromone.position = this.position;
 			this.sim.addActeur(pheromone);
@@ -79,7 +80,9 @@ export default class Pingouin extends Acteur {
 
 				switch (act.constructor.name) {
 					case "Herbe": // Herbe
+						console.log("AYA ! ");
 						if (coef >= 0.1) {
+
 							this.seek(act.objet3d.position, 1 - coef);
 						} else {
 							console.log("Delele acteur: ", act);
