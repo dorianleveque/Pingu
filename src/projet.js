@@ -94,7 +94,7 @@ class Rocher extends Acteur {
 }
 
 
-class Pheromone {
+class Pheromone extends Acteur {
 
 	constructor(nom, sim, options = {}) {
 		super(nom, sim);
