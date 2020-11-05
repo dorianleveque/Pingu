@@ -25,12 +25,13 @@ export function random(value) {
  * @param {Number} maxX nombre maximal x
  * @param {Number} minY nombre minimal y
  * @param {Number} maxY nombre maximal y
+ * @returns {Object} [x, y] 
  */
 export function getRandCoord(minX, maxX, minY, maxY)
 {
-  const minX = Math.ceil(minX)
-  const minY = Math.ceil(minY)
-  const maxX = Math.floor(maxX)
-  const maxY = Math.floor(maxY)
-  return randomRange(minX, maxX), randomRange(minY, maxY);
+  minX = Math.ceil(minX)
+  minY = Math.ceil(minY)
+  maxX = Math.floor(maxX)
+  maxY = Math.floor(maxY)
+  return [randomRange(minX, maxX), randomRange(minY, maxY)];
 }
