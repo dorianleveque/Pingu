@@ -78,12 +78,12 @@ class Acteur {
 	actualiser(dt) { }
 
 	isInNimbus(act) {
-		var distance = this.objet3d.position.distanceTo(act.objet3d.position);
-		/*var parent = this.data.parent || null;
-		if (act == parent || distance >= this.data.nimbus) {
+		const distance = this.objet3d.position.distanceTo(act.objet3d.position);
+		const parent = this.parent || null;
+		if (act == parent || distance >= this.nimbus) {
 			return 0;
-		}*/
-		return distance /// this.data.nimbus;
+		}
+		return distance / this.nimbus;
 	}
 }
 
