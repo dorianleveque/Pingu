@@ -74,7 +74,7 @@ export default class Acteur {
 		throw new Error("This function need to be implemented");
 	}
 
-	isInNimbus(act) {
+	isInNimbus(act) { // TODO: A finir (le param nimbus n'existe pas)
 		const distance = this.objet3d.position.distanceTo(act.objet3d.position);
 		if (act == this.parent || distance >= this.nimbus) {
 			return 0;
