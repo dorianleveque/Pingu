@@ -98,28 +98,28 @@ class Pheromone extends Acteur {
 
 	constructor(nom, sim, options = {}) {
 		super(nom, sim);
-		var rayon   = data.rayon || 0.1 ;  
-		var couleur = data.couleur || 0x0000ff ;
+		var rayon = data.rayon || 0.1;
+		var couleur = data.couleur || 0x0000ff;
 		var opa = data.opacity || 1;
-		
-		var sph = creerSphereTransparente(nom,{rayon:rayon, couleur:couleur, opacity:opa}) ;
-		this.setObjet3d(sph) ;
-	
+
+		var sph = creerSphereTransparente(nom, { rayon: rayon, couleur: couleur, opacity: opa });
+		this.setObjet3d(sph);
+
 		this.counter = 0;
 	}
 
-	actualiser(dt){
-		this.counter = this.counter + 1 ;
-		if(this.counter >= 100 && this.counter <= 150){
-				this.data.nimbus = 2;
-				this.objet3d.material.opacity = 0.5;
+	actualiser(dt) {
+		this.counter = this.counter + 1;
+		if (this.counter >= 100 && this.counter <= 150) {
+			this.data.nimbus = 2;
+			this.objet3d.material.opacity = 0.5;
 		}
-		else if(this.counter >= 150 && this.counter <= 300){
-				this.data.nimbus = 1;
-				this.objet3d.material.opacity = 0.15;
+		else if (this.counter >= 150 && this.counter <= 300) {
+			this.data.nimbus = 1;
+			this.objet3d.material.opacity = 0.15;
 		}
-		else if(this.counter >= 300){
-				this.sim.delActeur(this);
+		else if (this.counter >= 300) {
+			this.sim.delActeur(this);
 		}
 	}
 
@@ -189,54 +189,54 @@ class Pingouin extends Acteur {
 	}
 
 	actualiser(dt) {
-    var coef = 0;
-    for (const act of this.sim.acteurs){
-    	coef = act.isInNimbus(this);
-    	if (this!=act && coef>0) {
-    	    switch (act.nom[0]){
-            case "h": // Herbe
-                if (coef>=0.1) {
-                    this.seek(act.objet3d.position,1-coef);
-                } else{
-                    this.sim.delActeur(act);
-                }
-                break;
-	    case "t": // Humain
-		if (coef<0.2) {
-		    this.flee(act.objet3d.position,1-coef);
+		var coef = 0;
+		for (const act of this.sim.acteurs) {
+			coef = act.isInNimbus(this);
+			if (this != act && coef > 0) {
+				switch (act.nom[0]) {
+					case "h": // Herbe
+						if (coef >= 0.1) {
+							this.seek(act.objet3d.position, 1 - coef);
+						} else {
+							this.sim.delActeur(act);
+						}
+						break;
+					case "t": // Humain
+						if (coef < 0.2) {
+							this.flee(act.objet3d.position, 1 - coef);
+						}
+						break;
+					case "c":
+						var camFeet = act.objet3d.position.clone();
+						camFeet.y = 0;
+						this.flee(camFeet, 1);
+						break;
+					case "p":
+						if (coef != 0) {
+							this.seek(act.objet3d.position, 0.05);
+						}
+						break;
+					default:
+						break;
+				}
+			}
 		}
-		break;
-	    case "c":
-		var camFeet = act.objet3d.position.clone();
-		camFeet.y = 0;
-		this.flee(camFeet,1);
-		break;
-	    case "p":
-		if (coef!=0){
-		    this.seek(act.objet3d.position,0.05);
+
+		if (this.acceleration.length() == 0 && (this.outOfBound() || Math.random() < 0.01)) {
+			var [x, z] = getRandCoord(-50, 50, -50, 50);
+			this.cible.set(x, 0, z);
+			this.seek(this.cible, 1);
 		}
-		break;
-            default:
-                break;
-            }
-    	}
-    }
 
-    if (this.acceleration.length()==0 && (this.outOfBound() || Math.random()<0.01)){
-      	var [x,z] = getRandCoord(-50,50,-50,50);
-        this.cible.set(x,0,z);
-	    this.seek(this.cible,1);
-    }
-
-    this.acceleration.clampLength(0,this.forceMax);
-    this.vitesse.add(this.acceleration);
-    this.vitesse.clampLength(0,this.vitesseMax);
-    this.objet3d.position.add(this.vitesse);
-    var pp = this.objet3d.position.clone();
-    pp.add(this.vitesse);
-    this.objet3d.lookAt(pp);
-    this.acceleration.multiplyScalar(0);
-    this.creerPheromone();
+		this.acceleration.clampLength(0, this.forceMax);
+		this.vitesse.add(this.acceleration);
+		this.vitesse.clampLength(0, this.vitesseMax);
+		this.objet3d.position.add(this.vitesse);
+		var pp = this.objet3d.position.clone();
+		pp.add(this.vitesse);
+		this.objet3d.lookAt(pp);
+		this.acceleration.multiplyScalar(0);
+		this.creerPheromone();
 	}
 }
 
