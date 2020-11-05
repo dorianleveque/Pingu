@@ -30,7 +30,7 @@ export default class Appli extends Sim {
 
 		this.placerAleatoirement(nbHerbe, Herbe);
 		this.placerAleatoirement(nbPingouin, Pingouin);
-		//this.placerAleatoirement(nbRocher, Rocher, this.RocherCreationCallback);
+		this.placerAleatoirement(nbRocher, Rocher, this.RocherCreationCallback);
 
 	}
 
@@ -56,10 +56,8 @@ export default class Appli extends Sim {
 
 	RocherCreationCallback(classe, index) {
 		return {
-			options: {
-				rayon: randomRange(1, 6),
-				detail: random(5)
-			}
+			rayon: randomRange(0.5, 2),
+			detail: Math.ceil(random(2))
 		}
 	}
 
@@ -86,7 +84,7 @@ class Rocher extends Acteur {
 		this.setObjet3d(creerTetrahedre(
 			options.rayon || 0.5,
 			options.detail || 0,
-			options.couleur
+			options.couleur || 0x4d4d4d
 		));
 	}
 }
