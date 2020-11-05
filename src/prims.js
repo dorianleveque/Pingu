@@ -55,7 +55,14 @@ export function creerSphere(rayon, couleur = 0xffaaaa, texture = null) {
  */
 export function creerTetrahedre(rayon, detail, couleur = 0xffaaaa) {
 	const geo = new THREE.TetrahedronGeometry(rayon, detail);
-	const mat = new THREE.MeshStandardMaterial({ color: couleur });
+	const mat = new THREE.MeshBasicMaterial({ color: couleur });
+	return new THREE.Mesh(geo, mat);
+}
+
+
+export function creerCylindre(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert = false, couleur = 0xffaaaa) {
+	const geo = new THREE.CylinderGeometry(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert);
+	const mat = new THREE.MeshBasicMaterial({ color: couleur });
 	return new THREE.Mesh(geo, mat);
 }
 
