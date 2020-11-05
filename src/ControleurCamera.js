@@ -141,6 +141,7 @@ class ControleurCamera {
 		if(this.mdx >  1 && this.mx > 0) {this.aDroite = true ;  this.aGauche = false} else
 		if(this.mdx < -1 && this.mx < 0){this.aDroite = false ; this.aGauche = true} else
 		{this.aDroite = false ; this.aGauche = false};
+		*/
 		
 		/*if(event.movementX > 5){
 			controls.aDroite = true ;
