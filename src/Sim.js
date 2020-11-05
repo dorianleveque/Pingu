@@ -6,7 +6,7 @@ import ControleurCamera from "./ControleurCamera.js"
  * Une instance de Sim fait évoluer l'état des instances de la classe Acteur 
  * et les restitue
  */
-class Sim {
+export default class Sim {
 
 	constructor() {
 		this.renderer = null;
@@ -97,5 +97,3 @@ class Sim {
 	}
 
 }
-
-export default Sim;

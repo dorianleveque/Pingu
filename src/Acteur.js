@@ -5,7 +5,7 @@ import Sim from "./Sim.js";
  * Classe Acteur
  * Objet 3d de la scene lié à une scène
  */
-class Acteur {
+export default class Acteur {
 
 	/**
 	 * 
@@ -86,5 +86,3 @@ class Acteur {
 		return distance / this.nimbus;
 	}
 }
-
-export default Acteur;

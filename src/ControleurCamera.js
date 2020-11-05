@@ -4,7 +4,7 @@ import * as THREE from "../lib/three.module.js";
 // Implémentation de la classe qui permet un contrôle interactif de la caméra virtuelle
 // ======================================================================================================================
 
-class ControleurCamera {
+export default class ControleurCamera {
 
 	constructor(scene, camera) {
 		this.scene = scene;
@@ -170,7 +170,3 @@ class ControleurCamera {
 		}*/
 	}
 }
-
-
-
-export default ControleurCamera;
