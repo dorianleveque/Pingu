@@ -86,6 +86,11 @@ class Acteur {
 	}
 
 	actualiser(dt) { }
+
+	isInNimbus()
+	{
+		return false; // TODO
+	}
 }
 
 export default Acteur;
