@@ -11,7 +11,6 @@ export default class Humain extends Acteur {
     this.objet3d.scale.set(0.02, 0.02, 0.02);
 
     this.camera = new THREE.PerspectiveCamera(45.0, window.innerWidth / window.innerHeight, 0.1, 1000.0);
-		this.camera.position.set(5.0, 1.7, 5.0);
 		this.controleur = new ControleurCamera(this.scene, this.camera);
 
 		window.addEventListener('resize', () => {
@@ -30,5 +29,7 @@ export default class Humain extends Acteur {
   actualiser(dt) {
     this.controleur.update(dt);
     this.sim.renderer.render(this.sim.scene, this.camera);
+    this.objet3d.position.set(this.controleur.position);
+    this.objet3d.lookAt(this.controleur.cible);
   }
 }
