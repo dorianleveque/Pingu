@@ -28,5 +28,9 @@ export function random(value) {
  */
 export function getRandCoord(minX, maxX, minY, maxY)
 {
-  return randomRange(Math.ceil(minX), Math.floor(maxX)), randomRange(Math.ceil(minY), Math.floor(maxY));
+  const minX = Math.ceil(minX)
+  const minY = Math.ceil(minY)
+  const maxX = Math.floor(maxX)
+  const maxY = Math.floor(maxY)
+  return randomRange(minX, maxX), randomRange(minY, maxY);
 }
