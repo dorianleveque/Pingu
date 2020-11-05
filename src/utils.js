@@ -8,7 +8,7 @@
  * @param {Number} max Nombre maximale
  */
 export function randomRange(min, max) {
-  return Math.random() * (max - min + 1) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
@@ -17,4 +17,22 @@ export function randomRange(min, max) {
  */
 export function random(value) {
   return Math.random() * value;
+}
+
+/**
+ * Retourne des coordonnées aléatoire
+ * @param {Number} minX nombre minimal x
+ * @param {Number} maxX nombre maximal x
+ * @param {Number} minY nombre minimal y
+ * @param {Number} maxY nombre maximal y
+ */
+export function getRandCoord(minX, maxX, minY, maxY) {
+  minX = Math.ceil(minX);
+  minY = Math.ceil(minY);
+  maxX = Math.floor(maxX);
+  maxY = Math.floor(maxY);
+  return [
+    randomRange(minX, maxX),
+    randomRange(minY, maxY)
+  ];
 }
