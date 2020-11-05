@@ -1,0 +1,15 @@
+{
+  "name": "threejs",
+  "version": "1.0.0",
+  "description": "labo IEVA avec threejs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./MASTER/code/server.js"
+  },
+  "author": "dorian",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "three": "^0.121.1"
+  }
+}
