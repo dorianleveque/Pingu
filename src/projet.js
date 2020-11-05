@@ -2,7 +2,7 @@ import * as THREE from "../lib/three.module.js";
 import Acteur from "./Acteur.js"
 import Sim from "./Sim.js"
 import { creerTetrahedre, creerSol, creerSphere, chargerObj } from "./prims.js"
-import { random, randomRange } from "./utils.js"
+import { random, randomRange, getRandCoord } from "./utils.js"
 
 // ======================================================================================================================
 // Spécialisation des classes Sim et Acteur pour un projet particulier
@@ -142,7 +142,7 @@ class Pingouin extends Acteur {
 		this.deplacement = new THREE.Vector3();
 		this.vitesseMax = 0.1;
 		this.forceMax = 0.01;
-		this.refVect = THREE.Vector3(0, 0, 1);
+		this.refVect = new THREE.Vector3(0, 0, 1);
 		this.toBeEaten = {};
 		this.coordPhephe = [];
 
@@ -194,14 +194,14 @@ class Pingouin extends Acteur {
     	coef = act.isInNimbus(this);
     	if (this!=act && coef>0) {
     	    switch (act.nom[0]){
-            case "h":
+            case "h": // Herbe
                 if (coef>=0.1) {
                     this.seek(act.objet3d.position,1-coef);
                 } else{
                     this.sim.delActeur(act);
                 }
                 break;
-	    case "t":
+	    case "t": // Humain
 		if (coef<0.2) {
 		    this.flee(act.objet3d.position,1-coef);
 		}
