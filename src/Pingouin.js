@@ -100,11 +100,11 @@ export default class Pingouin extends Acteur {
 						camFeet.y = 0;
 						this.flee(camFeet, 1);
 						break;*/
-					case "Pingouin":
+					/*case "Pingouin":
 						if (coef != 0) {
 							this.seek(act.objet3d.position, 0.05);
 						}
-						break;
+						break;*/
 					default:
 						break;
 				}

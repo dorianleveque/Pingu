@@ -13,6 +13,7 @@ export default class Acteur {
 	constructor(sim) {
 		this.objet3d = null;
 		this.sim = sim;
+		this.parent = null;
 	}
 
 	/**
@@ -28,7 +29,7 @@ export default class Acteur {
 	 * Modification de la position de l'acteur
 	 * @param {THREE.Vector3} vector vecteur
 	 */
-	set position (vector) {
+	set position(vector) {
 		if (this.objet3d)
 			this.objet3d.position.set(vector.x, vector.y, vector.z);
 	}
@@ -73,8 +74,7 @@ export default class Acteur {
 
 	isInNimbus(act) { // TODO: A finir (le param nimbus n'existe pas)
 		const distance = this.objet3d.position.distanceTo(act.objet3d.position);
-		const parent = this.parent || null;
-		if (act == parent || distance >= this.nimbus) {
+		if (act == this.parent || distance >= this.nimbus) {
 			return 0;
 		}
 		return distance / this.nimbus;

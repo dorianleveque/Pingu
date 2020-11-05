@@ -2,6 +2,7 @@ import * as THREE from "../lib/three.module.js";
 import Acteur from "./Acteur.js"
 import Sim from "./Sim.js"
 import Pingouin from "./Pingouin.js"
+import Humain from "./Humain.js"
 import { creerTetrahedre, creerSol, creerSphere } from "./prims.js"
 import { random, randomRange, getRandCoord } from "./utils.js"
 
@@ -19,6 +20,7 @@ export default class Appli extends Sim {
 
 	creerScene(params = {}) {
 		const { surface, nbHerbe, nbPingouin, nbRocher } = params;
+
 		this.largeurTerrain = surface.largeur || 100;
 		this.profondeurTerrain = surface.profondeur || 100;
 
@@ -28,10 +30,13 @@ export default class Appli extends Sim {
 		// création du sol de la scène
 		this.scene.add(creerSol(surface.largeur, surface.profondeur));
 
+		// création du personnage
+		this.placerAleatoirement(1, Humain);
+
+		// création des éléments sur la carte
 		this.placerAleatoirement(nbHerbe, Herbe);
 		this.placerAleatoirement(nbPingouin, Pingouin);
 		this.placerAleatoirement(nbRocher, Rocher, this.RocherCreationCallback);
-
 	}
 
 	/**
