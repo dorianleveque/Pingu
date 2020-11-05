@@ -70,7 +70,9 @@ export default class Acteur {
 			return this.objet3d.visible;
 	}
 
-	actualiser(dt) { }
+	actualiser(dt) { 
+		throw new Error("This function need to be implemented");
+	}
 
 	isInNimbus(act) {
 		const distance = this.objet3d.position.distanceTo(act.objet3d.position);
