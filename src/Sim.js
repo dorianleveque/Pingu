@@ -22,11 +22,11 @@ class Sim {
 
 	init(params) {
 		params = params || {};
-		
+
 		this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild(this.renderer.domElement);
-		
+
 		this.scene = new THREE.Scene();
 		this.camera = new THREE.PerspectiveCamera(45.0, window.innerWidth / window.innerHeight, 0.1, 1000.0);
 		this.camera.position.set(5.0, 1.7, 5.0);
@@ -80,9 +80,22 @@ class Sim {
 		requestAnimationFrame(() => this.actualiser());
 	}
 
-	addActeur(act) {
-		this.acteurs.push(act);
+	addActeur(acteur) {
+		this.acteurs.push(acteur);
 	}
+
+	findActeur(acteur) {
+		return this.acteurs.find(act => act == acteur) || null;
+	}
+
+	delActeur(acteur) {
+		const a = this.findActeur(acteur)
+		if (a != null) {
+			this.scene.remove(acteur.objet3d);
+			this.acteurs.splice(this.acteurs.indexOf(a), 1);
+		}
+	}
+
 }
 
 export default Sim;
