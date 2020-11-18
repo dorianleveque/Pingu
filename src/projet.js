@@ -77,7 +77,6 @@ class Herbe extends Acteur {
 			options.couleur || 0x78f03c
 		));
 	}
-
 }
 
 // La classe décrivant les rochers
