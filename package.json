@@ -4,12 +4,14 @@
   "description": "labo IEVA avec threejs",
   "main": "index.js",
   "scripts": {
-    "start": "node ./server.js"
+    "start": "browser-sync start --server --watch"
   },
   "author": "dorian",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
     "three": "^0.121.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.13"
   }
 }
