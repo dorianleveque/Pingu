@@ -7,10 +7,10 @@ export default class RandomTarget extends Component {
     super(actor);
     const [generateWhenNoSpeed, xMin, xMax, zMin, zMax] = options;
     this.generateWhenNoSpeed = generateWhenNoSpeed || false;
-    this.xMin = xMin || -Math.ceil(this.actor.sim.groundWidth / 2);
-    this.xMax = xMax || Math.ceil(this.actor.sim.groundWidth / 2);
-    this.zMin = zMin || -Math.ceil(this.actor.sim.groundDepth / 2);
-    this.zMax = zMax || Math.ceil(this.actor.sim.groundDepth / 2);
+    this.xMin = xMin || -Math.floor(this.actor.sim.groundWidth / 2);
+    this.xMax = xMax || Math.floor(this.actor.sim.groundWidth / 2);
+    this.zMin = zMin || -Math.floor(this.actor.sim.groundDepth / 2);
+    this.zMax = zMax || Math.floor(this.actor.sim.groundDepth / 2);
   }
 
   update() {
