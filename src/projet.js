@@ -1,91 +1,106 @@
 import * as THREE from "../lib/three.module.js";
-import Acteur from "./Acteur.js"
+import Actor from "./Actor.js"
 import Sim from "./Sim.js"
-import Pingouin from "./Pingouin.js"
-import Humain from "./Humain.js"
-import { creerTetrahedre, creerSol, creerSphere } from "./prims.js"
+import Penguin from "./Penguin.js"
+import Humain from "./Human.js"
+import { createTetrahedre, createPlane, createSphere } from "./prims.js"
 import { random, randomRange, getRandCoord } from "./utils.js"
 
 // ======================================================================================================================
-// Spécialisation des classes Sim et Acteur pour un projet particulier
+// Spécification of Sim and Actor classes for a specific project
 // ======================================================================================================================
 
 export default class Appli extends Sim {
 
 	constructor() {
 		super();
-		this.largeurTerrain = null;
-		this.profondeurTerrain = null;
+		this.groundWidth = 0;
+		this.groundDepth = 0;
 	}
 
-	creerScene(params = {}) {
-		const { surface, nbHerbe, nbPingouin, nbRocher } = params;
+	createScene(params = {}) {
+		const { ground, grassCount, penguinCount, rockCount } = params;
 
-		this.largeurTerrain = surface.largeur || 100;
-		this.profondeurTerrain = surface.profondeur || 100;
+		this.groundWidth = ground.width || 100;
+		this.groundDepth = ground.depth || 100;
 
-		//ajout d'un repère à 3 axes dans la scène
+		//add a 3-axis marker in the scene
 		this.scene.add(new THREE.AxesHelper(3.0));
 
-		// création du sol de la scène
-		this.scene.add(creerSol(surface.largeur, surface.profondeur));
+		// ground creation
+		this.scene.add(createPlane(this.groundWidth, this.groundDepth));
 
-		// création du personnage
-		this.placerAleatoirement(1, Humain);
+		// character creation
+		this.placeRandomly(1, Humain);
 
-		// création des éléments sur la carte
-		this.placerAleatoirement(nbHerbe, Herbe);
-		this.placerAleatoirement(nbPingouin, Pingouin);
-		this.placerAleatoirement(nbRocher, Rocher, this.RocherCreationCallback);
+		// place elements on the scene
+		this.placeRandomly(grassCount, Grass);
+		this.placeRandomly(penguinCount, Penguin, this.PenguinCreationCallback);
+		this.placeRandomly(rockCount, Rock, this.RockCreationCallback);
 	}
 
 	/**
-	 * Place Aléatoirement sur le terrains plusieurs instance de l'acteur indiqué
-	 * @param {Number} nbMax Nombre maximum d'acteur à placer sur le terrain
-	 * @param {Class} classe Classe d'acteur à créer et placer
-	 * @param {Function} creationCallback Fonction appelée avant la création de l'acteur pour personnaliser ses options ou modifier des options d'orientation
+	 * Check if actor is out of the ground
+	 * @param {Actor} actor
 	 */
-	placerAleatoirement(nbMax, classe, creationCallback = (classe, index) => { }) {
-		for (let i = 0; i < nbMax; i++) {
+	isOutOfGround(actor) {
+		const pos = actor.position;
+		return pos.x < -this.groundWidth/2 || pos.x > this.groundWidth/2 || pos.z < -this.groundDepth/2 || pos.z > this.groundDepth/2;
+	}
+
+	/**
+	 * Place Aléatoirement sur le terrains plusieurs instance de l'actor indiqué
+	 * @param {Number} count Nombre maximum d'actor à placer sur le terrain
+	 * @param {Class} classe Classe d'actor à créer et placer
+	 * @param {Function} creationCallback Fonction appelée avant la création de l'actor pour personnaliser ses options ou modifier des options d'orientation
+	 */
+	placeRandomly(count, classe, creationCallback = (classe, index) => { }) {
+		for (let i = 0; i < count; i++) {
 			const options = creationCallback(classe, i) || {}
-			const acteur = new classe(this, options);
+			const actor = new classe(this, options);
 
 			// le terrain généré est centré
-			const dlt = this.largeurTerrain / 2;
-			const dpt = this.profondeurTerrain / 2;
+			const dlt = this.groundWidth / 2;
+			const dpt = this.groundDepth / 2;
 			const [x, z] = getRandCoord(-dlt, dlt, -dpt, dpt);
-			acteur.position = new THREE.Vector3(x, 0, z);
-			this.addActeur(acteur)
+			actor.position = new THREE.Vector3(x, 0, z);
+			this.addActor(actor)
 		}
 	}
 
-	RocherCreationCallback(classe, index) {
+	RockCreationCallback(classe, index) {
 		return {
 			rayon: randomRange(0.5, 2),
 			detail: Math.ceil(random(2))
 		}
 	}
 
+	PenguinCreationCallback(classe, index) {
+		return {
+			mass: 1//randomRange(2.5, 23)
+		}
+	}
+
 }
 
-class Herbe extends Acteur {
+class Grass extends Actor {
 
 	constructor(sim, options = {}) {
 		super(sim);
-		this.setObjet3d(creerSphere(
+		this.setObjet3d(createSphere(
 			options.rayon || 0.25,
-			options.couleur || 0x78f03c
+			options.couleur || 0x056e00
 		));
 	}
 }
 
 // La classe décrivant les rochers
 // ===============================
-class Rocher extends Acteur {
+class Rock extends Actor {
 
 	constructor(sim, options = {}) {
 		super(sim);
-		this.setObjet3d(creerTetrahedre(
+		this.setObjet3d(createTetrahedre(
 			options.rayon || 0.5,
 			options.detail || 0,
 			options.couleur || 0x4d4d4d

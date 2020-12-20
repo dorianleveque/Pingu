@@ -13,7 +13,7 @@ import { OBJLoader } from "../lib/OBJLoader.js"
  * @param {Number} couleur Couleur de la scene
  * @param {String} texture Nom de la texture
  */
-export function creerSol(largeur, hauteur, couleur = 0xaaaaaa, texture = null) {
+export function createPlane(largeur, hauteur, couleur = 0xaaaaaa, texture = null) {
 	const geo = new THREE.PlaneGeometry(largeur, hauteur);
 	const mat = new THREE.MeshStandardMaterial({ color: couleur });
 	const mesh = new THREE.Mesh(geo, mat);
@@ -29,7 +29,7 @@ export function creerSol(largeur, hauteur, couleur = 0xaaaaaa, texture = null) {
  * @param {Number} couleur Couleur de la boite
  * @param {String} texture Nom de la texture
  */
-export function creerBoite(largeur, hauteur, profondeur, couleur = 0xffaaaa, texture = null) {
+export function createBox(largeur, hauteur, profondeur, couleur = 0xffaaaa, texture = null) {
 	const geo = new THREE.BoxGeometry(largeur, hauteur, profondeur);
 	const mat = new THREE.MeshStandardMaterial({ color: couleur });
 	return new THREE.Mesh(geo, mat);
@@ -41,7 +41,7 @@ export function creerBoite(largeur, hauteur, profondeur, couleur = 0xffaaaa, tex
  * @param {Number} detail Nombre de polygone
  * @param {Number} couleur Couleur du tetrahedre
  */
-export function creerTetrahedre(rayon, detail, couleur = 0xffaaaa) {
+export function createTetrahedre(rayon, detail, couleur = 0xffaaaa) {
 	const geo = new THREE.TetrahedronGeometry(rayon, detail);
 	const mat = new THREE.MeshBasicMaterial({ color: couleur });
 	return new THREE.Mesh(geo, mat);
@@ -53,7 +53,7 @@ export function creerTetrahedre(rayon, detail, couleur = 0xffaaaa) {
  * @param {Number} couleur Couleur de la sphère
  * @param {Number} opacite Opacite de la sphère
  */
-export function creerSphere(rayon, couleur = 0xffaaaa, opacite = 1) {
+export function createSphere(rayon, couleur = 0xffaaaa, opacite = 1) {
 	const geo = new THREE.SphereGeometry(rayon, 32, 32);
 	const mat = new THREE.MeshLambertMaterial({ color: couleur, transparent: true, opacity: opacite });
 	return new THREE.Mesh(geo, mat);
@@ -69,7 +69,7 @@ export function creerSphere(rayon, couleur = 0xffaaaa, opacite = 1) {
  * @param {Number} cylindreOuvert 
  * @param {Number} couleur 
  */
-export function creerCylindre(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert = false, couleur = 0xffaaaa) {
+export function createCylinder(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert = false, couleur = 0xffaaaa) {
 	const geo = new THREE.CylinderGeometry(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert);
 	const mat = new THREE.MeshBasicMaterial({ color: couleur });
 	return new THREE.Mesh(geo, mat);
@@ -81,7 +81,7 @@ export function creerCylindre(rayonHaut, rayonBas, hauteur, nbSegments, hauteurS
  * @param {String} objPath Chemin du fichier .obj
  * @param {String} mtlPath Chemin du fichier .mtl
  */
-export function chargerObj(nom, objPath, mtlPath) {
+export function loadObj(nom, objPath, mtlPath) {
 	const mtlLoader = new MTLLoader();
 	const objLoader = new OBJLoader();
 	const groupe = new THREE.Group();

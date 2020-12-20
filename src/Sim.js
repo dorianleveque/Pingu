@@ -12,7 +12,7 @@ export default class Sim {
 		this.scene = null;
 		this.horloge = 0.0;
 		this.chrono = null;
-		this.acteurs = [];
+		this.actors = [];
 
 		this.textureLoader = new THREE.TextureLoader();
 	}
@@ -29,7 +29,7 @@ export default class Sim {
 		this.scene.add(new THREE.AmbientLight(0xffffff, 1.0));
 		this.scene.add(new THREE.GridHelper(100, 20));
 
-		this.creerScene(params);
+		this.createScene(params);
 
 		this.chrono = new THREE.Clock();
 		this.chrono.start();
@@ -39,14 +39,14 @@ export default class Sim {
 	 * Méthode de création du contenu du monde : à surcharger
 	 * @param {Object} params 
 	 */
-	creerScene(params) {
-		throw new Error('You have to implement the method creerScene!');
+	createScene(params) {
+		throw new Error('You have to implement the method createScene!');
 	}
 
 	/**
 	 * Boucle de simulation
 	 */
-	actualiser() {
+	update() {
 		const dt = this.chrono.getDelta();
 		this.horloge += dt;
 
@@ -56,25 +56,25 @@ export default class Sim {
 
 		// Boucle ACTION
 		// =============
-		this.acteurs.forEach(acteur => acteur.actualiser(dt));
+		this.actors.forEach(actor => actor.update(dt));
 
 		//this.renderer.render(this.scene, this.camera);
-		requestAnimationFrame(() => this.actualiser());
+		requestAnimationFrame(() => this.update());
 	}
 
-	addActeur(acteur) {
-		this.acteurs.push(acteur);
+	addActor(actor) {
+		this.actors.push(actor);
 	}
 
-	findActeur(acteur) {
-		return this.acteurs.find(act => act == acteur) || null;
+	findActor(actor) {
+		return this.actors.find(act => act == actor) || null;
 	}
 
-	delActeur(acteur) {
-		const a = this.findActeur(acteur)
+	removeActor(actor) {
+		const a = this.findActor(actor)
 		if (a != null) {
-			this.scene.remove(acteur.objet3d);
-			this.acteurs.splice(this.acteurs.indexOf(a), 1);
+			this.scene.remove(actor.objet3d);
+			this.actors.splice(this.actors.indexOf(a), 1);
 		}
 	}
 

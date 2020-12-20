@@ -2,9 +2,9 @@ import Appli from "./src/projet.js"
 
 var sim = new Appli();
 sim.init({
-  surface: { largeur: 100, profondeur: 100 },
-  nbPingouin: 2,
-  nbHerbe: 200,
-  nbRocher: 20
+  ground: { width: 100, depth: 100 },
+  penguinCount: 1,
+  grassCount: 200,
+  rockCount: 20
 });
-sim.actualiser();
+sim.update();
