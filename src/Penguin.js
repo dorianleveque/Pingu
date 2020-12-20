@@ -1,10 +1,10 @@
 import Actor from "./Actor.js"
-import Pheromone from "./Pheromone.js"
 import { loadObj } from "./prims.js"
-import { getRandCoord } from "./utils.js"
 import FSM from "./components/FSM.js"
 import {Seek, Flee} from "./components/Steering.js";
 import Arrive from "./components/Arrive.js";
+import RandomTarget from "./components/RandomTarget.js"
+import ReleasePheromone from "./components/ReleasePheromone.js"
 
 export default class Penguin extends Actor {
 
@@ -14,20 +14,7 @@ export default class Penguin extends Actor {
 		this.setObjet3d(loadObj("tux1", "assets/obj/pingouin/penguin.obj", "assets/obj/pingouin/penguin.mtl"));
 		this.addComponent(FSM, {
 			"wander": {
-				"update": (dt) => {
-					if (Math.round(this.velocity.length() * 100) == 0 || this.isOutOfGround()) {
-						const [x, z] = getRandCoord(-50, 50, -50, 50);
-						this.target.set(x, 0, z);
-						//console.log(`new target ${x} ${z}`)
-					}
-					/*if (this.acceleration.length()==0 && (this.isOutOfGround() || Math.random()<0.01)) {
-						const [x, z] = getRandCoord(-50, 50, -50, 50);
-						this.target.set(x, 0, z);
-					}*/
-
-					//if (Math.round(this.velocity.length()) < 0.1) console.log(`penguin position ${this.position.x} ${this.position.y} ${this.position.z}`)
-					this.createPheromone();
-				}
+				"update": (dt) => {}
 			},
 			"eat": {
 				"update": () => {}
@@ -36,16 +23,10 @@ export default class Penguin extends Actor {
 				"update": () => {}
 			}
 		}, "wander")
+		this.addComponent(RandomTarget);
 		this.addComponent(Seek)
 		this.addComponent(Arrive)
-	}
-
-	createPheromone() {
-		if (Math.random() < 0.02) {
-			const pheromone = new Pheromone(this.sim, this);
-			pheromone.position = this.position;
-			this.sim.addActor(pheromone);
-		}
+		this.addComponent(ReleasePheromone)
 	}
 
 	/*update(dt) {
