@@ -21,6 +21,7 @@ export default class Actor {
 		this.velocityMax = velocityMax;
 		this.forceMax = forceMax;
 		this.mass = mass;
+		this.nimbus = null;
 	}
 
 	/**
@@ -134,7 +135,7 @@ export default class Actor {
 		this.sim.scene.add(this.objet3d);
 	}
 
-	isInNimbus(act) { // TODO: A finir (le param nimbus n'existe pas)
+	isInNimbus(act) { // TODO: A finir
 		const distance = this.objet3d.position.distanceTo(act.objet3d.position);
 		if (act == this.parent || distance >= this.nimbus) {
 			return 0;
