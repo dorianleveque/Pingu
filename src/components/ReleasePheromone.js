@@ -13,7 +13,7 @@ export default class ReleasePheromone extends Component {
     if (Math.random() < this.randomRange) {
 			const pheromone = new Pheromone(this.actor.sim, this.actor);
 			pheromone.position = this.actor.position;
-			this.actor.sim.addActor(pheromone);
+      this.actor.sim.addActor(pheromone);
 		}
   }
 }

@@ -1,14 +1,37 @@
+
 import * as THREE from "../lib/three.module.js";
 import Actor from "./Actor.js"
 import Sim from "./Sim.js"
 import Penguin from "./Penguin.js"
 import Humain from "./Human.js"
-import { createTetrahedre, createPlane, createSphere } from "./prims.js"
+import Rock from "./Rock.js"
+import Grass from "./Grass.js"
+import { createPlane } from "./prims.js"
 import { random, randomRange, getRandCoord } from "./utils.js"
 
 // ======================================================================================================================
 // Spécification of Sim and Actor classes for a specific project
 // ======================================================================================================================
+
+// give for each object in JavaScript a unique id
+(function() {
+	if ( typeof Object.id == "undefined" ) {
+			var id = 0;
+
+			Object.id = function(o) {
+					if ( typeof o.__uniqueid == "undefined" ) {
+							Object.defineProperty(o, "__uniqueid", {
+									value: ++id,
+									enumerable: false,
+									// This could go either way, depending on your 
+									// interpretation of what an "id" is
+									writable: false
+							});
+					}
+					return o.__uniqueid;
+			};
+	}
+})();
 
 export default class Appli extends Sim {
 
@@ -70,7 +93,7 @@ export default class Appli extends Sim {
 
 	RockCreationCallback(classe, index) {
 		return {
-			rayon: randomRange(0.5, 2),
+			radius: randomRange(0.5, 2),
 			detail: Math.ceil(random(2))
 		}
 	}
@@ -83,29 +106,6 @@ export default class Appli extends Sim {
 
 }
 
-class Grass extends Actor {
 
-	constructor(sim, options = {}) {
-		super(sim);
-		this.setObjet3d(createSphere(
-			options.rayon || 0.25,
-			options.couleur || 0x056e00
-		));
-	}
-}
-
-// La classe décrivant les rochers
-// ===============================
-class Rock extends Actor {
-
-	constructor(sim, options = {}) {
-		super(sim);
-		this.setObjet3d(createTetrahedre(
-			options.rayon || 0.5,
-			options.detail || 0,
-			options.couleur || 0x4d4d4d
-		));
-	}
-}
 
 

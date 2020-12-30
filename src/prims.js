@@ -8,14 +8,15 @@ import { OBJLoader } from "../lib/OBJLoader.js"
 
 /**
  * Créer un sol
- * @param {Number} largeur Largeur de la scene
- * @param {Number} hauteur Hauteur de la scene
- * @param {Number} couleur Couleur de la scene
- * @param {String} texture Nom de la texture
+ * @param {Number} width Largeur de la scene
+ * @param {Number} height Hauteur de la scene
+ * @param {Number} color Couleur de la scene
+ * @param {Number} opacity Opacite de la scene
+ * @param {Boolean} wireframe Afficher en filament la scene
  */
-export function createPlane(largeur, hauteur, couleur = 0xaaaaaa, texture = null) {
-	const geo = new THREE.PlaneGeometry(largeur, hauteur);
-	const mat = new THREE.MeshStandardMaterial({ color: couleur });
+export function createPlane(width, height, color = 0xaaaaaa, opacity = 1, wireframe = false) {
+	const geo = new THREE.PlaneGeometry(width, height);
+	const mat = new THREE.MeshLambertMaterial({ color, transparent: true, opacity, wireframe });
 	const mesh = new THREE.Mesh(geo, mat);
 	mesh.rotation.x = -Math.PI / 2.0;
 	return mesh;
@@ -23,57 +24,84 @@ export function createPlane(largeur, hauteur, couleur = 0xaaaaaa, texture = null
 
 /**
  * Créer une boite
- * @param {Number} largeur Largeur de la boite
- * @param {Number} hauteur Hauteur de la boite
- * @param {Number} profondeur Profondeur de la boite
- * @param {Number} couleur Couleur de la boite
- * @param {String} texture Nom de la texture
+ * @param {Number} width Largeur de la boite
+ * @param {Number} height Hauteur de la boite
+ * @param {Number} depth Profondeur de la boite
+ * @param {Number} color Couleur de la boite
+ * @param {Number} opacity Opacite de la boite
+ * @param {Boolean} wireframe Afficher en filament la boite
  */
-export function createBox(largeur, hauteur, profondeur, couleur = 0xffaaaa, texture = null) {
-	const geo = new THREE.BoxGeometry(largeur, hauteur, profondeur);
-	const mat = new THREE.MeshStandardMaterial({ color: couleur });
+export function createBox(width, height, depth, color = 0xffaaaa, opacity = 1, wireframe = false) {
+	const geo = new THREE.BoxGeometry(width, height, depth);
+	const mat = new THREE.MeshLambertMaterial({ color, transparent: true, opacity, wireframe });
 	return new THREE.Mesh(geo, mat);
 }
 
 /**
  * Creer un tetrahedre
- * @param {Number} rayon Rayon du tetrahedre
+ * @param {Number} radius Rayon du tetrahedre
  * @param {Number} detail Nombre de polygone
- * @param {Number} couleur Couleur du tetrahedre
+ * @param {Number} color Couleur du tetrahedre
+ * @param {Number} opacity Opacite du tetrahedre
+ * @param {Boolean} wireframe Afficher en filament le tetrahedre
  */
-export function createTetrahedre(rayon, detail, couleur = 0xffaaaa) {
-	const geo = new THREE.TetrahedronGeometry(rayon, detail);
-	const mat = new THREE.MeshBasicMaterial({ color: couleur });
+export function createTetrahedre(radius, detail, color = 0xffaaaa, opacity = 1, wireframe = false) {
+	const geo = new THREE.TetrahedronGeometry(radius, detail);
+	const mat = new THREE.MeshLambertMaterial({ color, transparent: true, opacity, wireframe });
 	return new THREE.Mesh(geo, mat);
 }
 
 /**
  * Creer une sphere
- * @param {Number} rayon Rayon de la sphere
- * @param {Number} couleur Couleur de la sphère
- * @param {Number} opacite Opacite de la sphère
+ * @param {Number} radius Rayon de la sphere
+ * @param {Number} widthSegments nombres de segments en largeur
+ * @param {Number} heightSegments nombres de segments en hauteur
+ * @param {Number} color Couleur de la sphère
+ * @param {Number} opacity Opacite de la sphere
+ * @param {Boolean} wireframe Afficher en filament de la sphere
  */
-export function createSphere(rayon, couleur = 0xffaaaa, opacite = 1) {
-	const geo = new THREE.SphereGeometry(rayon, 32, 32);
-	const mat = new THREE.MeshLambertMaterial({ color: couleur, transparent: true, opacity: opacite });
+export function createSphere(radius, widthSegments, heightSegments, color, opacity = 1, wireframe = false) {
+	const geo = new THREE.SphereGeometry(radius, widthSegments, heightSegments);
+	const mat = new THREE.MeshLambertMaterial({ color, transparent: true, opacity, wireframe });
 	return new THREE.Mesh(geo, mat);
 }
 
 /**
  * Creer un cylindre
- * @param {Number} rayonHaut 
- * @param {Number} rayonBas 
- * @param {Number} hauteur 
- * @param {Number} nbSegments 
- * @param {Number} hauteurSegment 
- * @param {Number} cylindreOuvert 
- * @param {Number} couleur 
+ * @param {Number} radius Rayon du cylindre
+ * @param {Number} height Hauteur du cylindre
+ * @param {Number} radialSegments Nombre de segments 
+ * @param {Number} heightSegments Hauteur des segments
+ * @param {Number} openEnded Ouvrir le cylindre ?
+ * @param {Number} thetaStart Start angle for first segment
+ * @param {Number} theta Angle de fermeture du cylindre
+ * @param {Number} color Couleur du cylindre
+ * @param {Number} opacity Opacite de la sphere
+ * @param {Boolean} wireframe Afficher en filament de la sphere
  */
-export function createCylinder(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert = false, couleur = 0xffaaaa) {
-	const geo = new THREE.CylinderGeometry(rayonHaut, rayonBas, hauteur, nbSegments, hauteurSegment, cylindreOuvert);
-	const mat = new THREE.MeshBasicMaterial({ color: couleur });
+export function createCylinder(radius, height, radialSegments, heightSegments, openEnded = false, thetaStart = 0, theta = 6.3, color = 0xffaaaa, opacity = 1, wireframe = false) {
+	const geo = new THREE.CylinderGeometry(radius, radius, height, radialSegments, heightSegments, openEnded, thetaStart, theta);
+	const mat = new THREE.MeshLambertMaterial({ color, transparent: true, opacity, wireframe });
 	return new THREE.Mesh(geo, mat);
 }
+
+/**
+ * Creer un cone
+ * @param {Number} radius Rayon haut du cylindre
+ * @param {Number} height Hauteur du cylindre
+ * @param {Number} radialSegments Nombre de segments 
+ * @param {Number} heightSegments Hauteur des segments
+ * @param {Number} openEnded Ouvrir le cylindre ?
+ * @param {Number} color Couleur du cylindre
+ * @param {Number} opacity Opacite de la sphere
+ * @param {Boolean} wireframe Afficher en filament de la sphere
+ */
+export function createCone(radius, height, radialSegments, heightSegments, openEnded = false, color = 0xffaaaa, opacity = 1, wireframe = false) {
+	const geo = new THREE.ConeGeometry(radius, height, radialSegments, heightSegments, openEnded);
+	const mat = new THREE.MeshLambertMaterial({ color, transparent: true, opacity, wireframe });
+	return new THREE.Mesh(geo, mat);
+}
+
 
 /**
  * Charger un objet 3D

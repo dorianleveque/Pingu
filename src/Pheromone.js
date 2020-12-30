@@ -1,38 +1,40 @@
 import Actor from "./Actor.js"
 import { createSphere } from "./prims.js"
 import Component from "./components/Component.js"
+import { Nimbus } from "./triggers/Trigger.js";
+import RegionTriggerSphere from "./triggers/RegionTriggerSphere.js";
+import Penguin from "./Penguin.js";
 
 export default class Pheromone extends Actor {
 
 	constructor(sim, parent, options = {}) {
 		super(sim);
 		this.parent = parent;
-		this.setObjet3d(createSphere(
-			options.rayon || 0.1,
-			options.couleur || 0x0000ff,
+		this.setObject3d(createSphere(
+			options.radius || 0.1,
+			3, 3,
+			options.color || 0x0000ff,
 			options.opacity || 1
 		));
-		this.addComponent(PheromoneBehavior)
+		this.addComponent(PheromoneBehavior, options.delay)
+		this.setTrigger(Nimbus, RegionTriggerSphere, { radius: 2 }, [Penguin])
 	}
 }
 
 class PheromoneBehavior extends Component {
 
-  constructor(actor, options = []) {
+	constructor(actor, options = []) {
 		super(actor);
-    this.counter = 0;
-  }
+		const [delay] = options;
+		this.delay = delay || 500;
+		this.counter = 0;
+	}
 
-  update(dt) {
-		if (this.counter >= 100 && this.counter <= 150) {
-			this.actor.objet3d.material.opacity = 0.5;
-		}
-		else if (this.counter >= 150 && this.counter <= 300) {
-			this.actor.objet3d.material.opacity = 0.15;
-		}
-		else if (this.counter >= 300) {
+	update(dt) {
+		this.actor.object3d.material.opacity = 1 - this.counter / this.delay;
+		if (this.counter >= this.delay) {
 			this.actor.sim.removeActor(this.actor);
 		}
 		this.counter++;
-  }
+	}
 }

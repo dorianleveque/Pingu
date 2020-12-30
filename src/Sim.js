@@ -13,6 +13,7 @@ export default class Sim {
 		this.horloge = 0.0;
 		this.chrono = null;
 		this.actors = [];
+		this.triggers = [];
 
 		this.textureLoader = new THREE.TextureLoader();
 	}
@@ -50,31 +51,44 @@ export default class Sim {
 		const dt = this.chrono.getDelta();
 		this.horloge += dt;
 
-		// Modification de la caméra virtuelle
-		// ===================================
-		//this.controleur.update(dt);
-
 		// Boucle ACTION
 		// =============
+		this.triggers.forEach(trigger => trigger.eval());
 		this.actors.forEach(actor => actor.update(dt));
 
-		//this.renderer.render(this.scene, this.camera);
 		requestAnimationFrame(() => this.update());
 	}
 
 	addActor(actor) {
 		this.actors.push(actor);
+		//this.scene.add()
 	}
 
 	findActor(actor) {
-		return this.actors.find(act => act == actor) || null;
+		return this.actors.find(act => act === actor) || null;
 	}
 
 	removeActor(actor) {
 		const a = this.findActor(actor)
 		if (a != null) {
-			this.scene.remove(actor.objet3d);
+			a.getTrigger().forEach(trig => this.removeTrigger(trig));
+			this.scene.remove(actor.object3d);
 			this.actors.splice(this.actors.indexOf(a), 1);
+		}
+	}
+
+	addTrigger(trigger) {
+		this.triggers.push(trigger);
+	}
+
+	findTrigger(trigger) {
+		return this.triggers.find(trig => trig === trigger) || null;
+	}
+
+	removeTrigger(trigger) {
+		const trig = this.findTrigger(trigger)
+		if (trig != null) {
+			this.triggers.splice(this.triggers.indexOf(trig), 1);
 		}
 	}
 

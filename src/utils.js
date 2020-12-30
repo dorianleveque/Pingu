@@ -27,11 +27,26 @@ export function random(value) {
  * @param {Number} maxY nombre maximal y
  * @returns {Object} [x, y] 
  */
-export function getRandCoord(minX, maxX, minY, maxY)
-{
+export function getRandCoord(minX, maxX, minY, maxY) {
   minX = Math.ceil(minX)
   minY = Math.ceil(minY)
   maxX = Math.floor(maxX)
   maxY = Math.floor(maxY)
   return [randomRange(minX, maxX), randomRange(minY, maxY)];
+}
+
+/**
+ * Convert radians to degrees
+ * @param {Number} rad radians
+ */
+export function rad2deg(rad) {
+  return rad * (180 / Math.PI);
+}
+
+/**
+ * Convert degrees to radians
+ * @param {Number} deg degrees
+ */
+export function deg2rad(deg) {
+  return deg * (Math.PI / 180);
 }

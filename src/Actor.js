@@ -12,8 +12,7 @@ export default class Actor {
 	 */
 	constructor(sim, mass = 1, velocityMax = 8, forceMax = 1) {
 		this.sim = sim;
-		this.objet3d = null;
-		this.parent = null;
+		this.object3d = null;
 		this.components = []
 		this.velocity = new THREE.Vector3();
 		this.acceleration = new THREE.Vector3();
@@ -21,7 +20,7 @@ export default class Actor {
 		this.velocityMax = velocityMax;
 		this.forceMax = forceMax;
 		this.mass = mass;
-		this.nimbus = null;
+		this.trigger = {}
 	}
 
 	/**
@@ -29,16 +28,16 @@ export default class Actor {
 	 * @param {THREE.Vector3} vector vecteur
 	 */
 	set position(vector) {
-		if (this.objet3d)
-			this.objet3d.position.set(vector.x, vector.y, vector.z);
+		if (this.object3d)
+			this.object3d.position.set(vector.x, vector.y, vector.z);
 	}
 
 	/**
 	 * Retourne le vecteur position de l'acteur
 	 */
 	get position() {
-		if (this.objet3d)
-			return this.objet3d.position;
+		if (this.object3d)
+			return this.object3d.position;
 	}
 
 	/**
@@ -46,13 +45,13 @@ export default class Actor {
 	 * @param {Number} cap 
 	 */
 	set orientation(cap) {
-		if (this.objet3d)
-			this.objet3d.rotation.y = cap;
+		if (this.object3d)
+			this.object3d.rotation.y = cap;
 	}
 
 	get orientation() {
-		if (this.objet3d)
-			return this.objet3d.rotation.y;
+		if (this.object3d)
+			return this.object3d.rotation.y;
 	}
 
 	/**
@@ -60,13 +59,13 @@ export default class Actor {
 	 * @param {Boolean} v 
 	 */
 	set visible(v) {
-		if (this.objet3d)
-			this.objet3d.visible = v;
+		if (this.object3d)
+			this.object3d.visible = v;
 	}
 
 	get visible() {
-		if (this.objet3d)
-			return this.objet3d.visible;
+		if (this.object3d)
+			return this.object3d.visible;
 	}
 
 	update(dt) {
@@ -80,7 +79,7 @@ export default class Actor {
 
 		const direction = this.position.clone()
 		direction.add(this.velocity)
-		this.objet3d.lookAt(direction)
+		this.object3d.lookAt(direction)
 	}
 
 	/**
@@ -130,16 +129,65 @@ export default class Actor {
 	 * Affectation d'une incarnation à un acteur
 	 * @param {THREE.Object3D} obj 
 	 */
-	setObjet3d(obj) {
-		this.objet3d = obj;
-		this.sim.scene.add(this.objet3d);
+	setObject3d(obj) {
+		this.object3d = obj;
+		this.sim.scene.add(this.object3d);
 	}
 
-	isInNimbus(act) { // TODO: A finir
-		const distance = this.objet3d.position.distanceTo(act.objet3d.position);
-		if (act == this.parent || distance >= this.nimbus) {
-			return 0;
+	/**
+	 * 
+	 * @param {TriggerClass} triggerType Trigger class
+	 * @param {RegionClass} regionClass 
+	 * @param {Object} regionOptions 
+	 * @param {ActorClass} observedFilter
+	 * @returns Trigger
+	 */
+	setTrigger(triggerType, regionClass, regionOptions = {}, observedFilter = []) {
+		// check if a trigger of this type is already set for this actor
+		if (this.trigger.hasOwnProperty(triggerType)) {
+			this.sim.removeTrigger(this.trigger[triggerType]);
 		}
-		return distance / this.nimbus;
+		else {
+			const newTrigger = new triggerType(this, regionClass, regionOptions, observedFilter);
+			this.sim.addTrigger(newTrigger);
+			this.trigger[triggerType] = newTrigger;
+		}
+	}
+
+	getTrigger(triggerType = null) {
+		return (triggerType) ? this.trigger[triggerType] || null : Object.values(this.trigger);
+	}
+
+	/**
+	 * Event executed when an actor enter inside of the trigger area.
+	 * Can be redefinded
+	 * @param {String} triggerType type of trigger
+	 * @param {Actor} observed actor observed
+	 * @param {Number} coef more the value is close to 1, more the observed actor is close to the centre of the trigger
+	 */
+	onTriggerEnter(triggerType, observed, coef) {
+
+	}
+
+	/**
+	 * Event executed when an actor is inside of the trigger area.
+	 * Can be redefinded
+	 * @param {String} triggerType type of trigger
+	 * @param {Actor} observed actor observed
+	 * @param {Number} coef more the value is close to 1, more the observed actor is close to the centre of the trigger
+	 */
+	onTriggerStay(triggerType, observed, coef) {
+
+	}
+
+	/**
+	 * Event executed when an actor exit the trigger area.
+	 * Can be redefinded
+	 * @param {String} triggerType type of trigger
+	 * @param {Actor} observed actor observed
+	 * @param {Number} coef more the value is close to 1, more the observed actor is close to the centre of the trigger
+	 */
+	onTriggerExit(triggerType, observed, coef) {
+
 	}
 }

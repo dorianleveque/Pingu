@@ -24,6 +24,8 @@ export default class ControleurCamera {
 		this.aGauche = false;
 		this.aDroite = false;
 
+		this.nkey = false;
+
 		this.mouse = new THREE.Vector2();
 		this.raycaster = new THREE.Raycaster();
 		this.mouseClicked = false;
@@ -103,6 +105,8 @@ export default class ControleurCamera {
 			case 40: // BAS
 				this.enArriere = false;
 				break;
+			case 78: // N key
+				this.nkey = !this.nkey;
 		}
 	}
 

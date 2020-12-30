@@ -2,7 +2,7 @@
  * Contient la classe Nimbus et ses dérivées
  */
 
-import * as THREE from "../lib/three.module.js";
+import * as THREE from "../../lib/three.module.js";
 import Acteur from "./Acteur.js"
 
 export default class Nimbus {
