@@ -1,5 +1,5 @@
 import * as THREE from "../../lib/three.module.js";
-import ControleurCamera from "./ControleurCamera.js"
+import ControleurCamera from "../../lib/ControleurCamera.js"
 import { Actor, Penguin, Triggers } from "./index.js"
 import { loadObj } from "../Prims.js"
 
