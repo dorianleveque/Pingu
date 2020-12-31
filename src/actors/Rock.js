@@ -1,9 +1,7 @@
 import Actor from "./Actor.js"
-import Grass from "./Grass.js";
-import { createTetrahedre } from "./prims.js"
+import { createTetrahedre } from "../Prims.js"
 
 export default class Rock extends Actor {
-
 	constructor(sim, options = {}) {
 		super(sim);
 		this.setObject3d(createTetrahedre(

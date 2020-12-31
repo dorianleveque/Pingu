@@ -1,4 +1,4 @@
-import * as THREE from "../lib/three.module.js";
+import * as THREE from "../../lib/three.module.js";
 
 // ======================================================================================================================
 // Implémentation de la classe qui permet un contrôle interactif de la caméra virtuelle
@@ -146,7 +146,7 @@ export default class ControleurCamera {
 		if(this.mdx < -1 && this.mx < 0){this.aDroite = false ; this.aGauche = true} else
 		{this.aDroite = false ; this.aGauche = false};
 		*/
-		
+
 		/*if(event.movementX > 5){
 			controls.aDroite = true ;
 			controls.aGauche = false ;

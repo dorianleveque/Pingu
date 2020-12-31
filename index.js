@@ -1,10 +1,11 @@
-import Appli from "./src/projet.js"
+import App from "./src/App.js"
 
-var sim = new Appli();
-sim.init({
+const app = new App()
+app.init({
   ground: { width: 100, depth: 100 },
   penguinCount: 10,
+  penguinReynoldsCount: 10,
   grassCount: 200,
   rockCount: 80
 });
-sim.update();
+app.update();

@@ -5,7 +5,7 @@ export default class RegionTrigger {
     this.trigger = null;
     this.color = options.color || 0xffffff
   }
-  
+
   setTrigger(trigger) {
     this.trigger = trigger;
     this.visible = false;
@@ -15,14 +15,14 @@ export default class RegionTrigger {
   }
 
   set visible(v) {
-		if (this.object3d)
-			this.object3d.visible = v;
-	}
+    if (this.object3d)
+      this.object3d.visible = v;
+  }
 
-	get visible() {
-		if (this.object3d)
-			return this.object3d.visible;
-	}
+  get visible() {
+    if (this.object3d)
+      return this.object3d.visible;
+  }
 
   /**
    * Test if observed position is in the area

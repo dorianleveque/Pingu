@@ -1,7 +1,7 @@
-import * as THREE from "../../lib/three.module.js";
-import RegionTrigger from "./RegionTrigger.js";
+import * as THREE from "../../../lib/three.module.js";
+import RegionTrigger from "./regions/RegionTrigger.js";
 
-class Trigger {
+export default class Trigger {
 
   constructor(parent, regionTriggerClass, regionTriggerOptions = {}, observedFilter = []) {
     this.parent = parent;
@@ -11,6 +11,11 @@ class Trigger {
     this.previousObserved = [];
   }
 
+  /**
+   * List the changes between the previous ones observed and the new ones observed.
+   * @param {Array} previousChanged array of actors
+   * @param {Array} newChanged array of actors
+   */
   diff(previousChanged, newChanged) {
     return {
       'enter': newChanged.filter(e => !previousChanged.includes(e)),
@@ -19,13 +24,18 @@ class Trigger {
     }
   }
 
-  setRegion(regionTriggerClass, options) {
+  /**
+   * Set the detection field
+   * @param {RegionTrigger} regionTriggerClass RegionTrigger class
+   * @param {Object} options options
+   */
+  setRegion(regionTriggerClass, options = {}) {
     const region = new regionTriggerClass(options);
     if (region instanceof RegionTrigger) {
       this.region = region;
       this.region.setTrigger(this);
     }
-    else throw new Error("Region must be a RegionTriggerClass");
+    else throw new Error("Region must be a RegionTrigger class");
   }
 
   /**
@@ -44,7 +54,7 @@ class Trigger {
       Object.values(this.diff(this.previousObserved, inTrigger)).forEach((diffTypeList, index) => {
         diffTypeList.forEach(obs => {
           const { trigger, observer, observed } = this.notify(obs);
-          switch(index) {
+          switch (index) {
             case 0: observer.onTriggerEnter(trigger.constructor.name, observed, this.coef(obs)); break;
             case 1: observer.onTriggerStay(trigger.constructor.name, observed, this.coef(obs)); break;
             case 2: observer.onTriggerExit(trigger.constructor.name, observed, this.coef(obs)); break;
@@ -60,27 +70,42 @@ class Trigger {
     }
   }
 
+  /**
+   * Return a percentage of the distance between the observed position and the center position of the field.
+   * More the value is greater, more the observed actor is near the center of the field.
+   * Can be redefined.
+   * @param {Actor} observed observed actor
+   */
   coef(observed) {
     return 1 - (this.parent.position.distanceTo(observed.position) / this.region.radius);
   }
 
   /**
-   * 
+   * Operation done during the position test of the observed object.
+   * Can be redefined.
    * @param {Actor} observed observed actor
-   * @return {THREE.Vector3}
+   * @return {THREE.Vector3} position of the observed
    */
   testOnObserved(observed) {
-    throw new Error('This function must be implemented');
+    return observed.position;
   }
 
-
+  /**
+   * Must be redefined to return an object describing the observer to be notified, the type of trigger used and the object observed.
+   * @param {Actor} changed observed actor
+   * @example return {
+   *  "trigger": this,
+   *  "observer": observed,
+      "observed": this.parent
+   * }
+   */
   notify(changed) {
     throw new Error('This function must be implemented');
   }
 
   /**
-   * Observed element 
-   * @param {ActorClass} observed actor observed
+   * Add an observed element 
+   * @param {Actor} observed actor observed
    */
   addObserved(observed) {
     if (this.findObserved(observed) == null) {
@@ -88,10 +113,18 @@ class Trigger {
     }
   }
 
+  /**
+   * Find the actor and send him back or send back null if not found.
+   * @param {Actor} observed actor observed
+   */
   findObserved(observed) {
     return this.observed.find(obs => obs === observed) || null;
   }
 
+  /**
+   * Remove the actor specified
+   * @param {Actor} observed actor observed
+   */
   removeObserved(observed) {
     const obs = this.findObserved(observed)
     if (obs != null) {
@@ -100,77 +133,7 @@ class Trigger {
   }
 }
 
-export class Nimbus extends Trigger {
 
-  constructor(parent, regionTriggerClass, regionTriggerOptions, observedFilter = []) {
-    super(parent, regionTriggerClass, regionTriggerOptions, observedFilter);
-  }
 
-  testOnObserved(observed) {
-    return observed.position;
-  }
 
-  notify(observed) {
-    return {
-      'trigger': this,
-      'observer': observed,
-      'observed': this.parent
-    }
-  }
 
-  coef(observed) {
-    const d = 1 - (this.parent.position.distanceTo(observed.position) / this.region.radius);
-    return Math.pow(d, 2);
-  }
-}
-
-export class Focus extends Trigger {
-
-  constructor(parent, regionTriggerClass, regionTriggerOptions, observedFilter = []) {
-    super(parent, regionTriggerClass, regionTriggerOptions, observedFilter);
-  }
-
-  testOnObserved(observed) {
-    return observed.position;
-  }
-
-  notify(observed) {
-    return {
-      'trigger': this,
-      'observer': this.parent,
-      'observed': observed
-    }
-  }
-
-  coef(observed) {
-    const d = 1 - (this.parent.position.distanceTo(observed.position) / this.region.radius);
-    return Math.sqrt(d);
-  }
-}
-
-export class Area extends Trigger {
-
-  constructor(parent, regionTriggerClass, regionTriggerOptions, observedFilter = []) {
-    super(parent, regionTriggerClass, regionTriggerOptions, observedFilter);
-  }
-
-  testOnObserved(observed) {
-    const trigger = observed.getTrigger(Area);
-    if (trigger) {
-      const radius = trigger.region.radius;
-      const dir = new THREE.Vector3();
-      dir.subVectors(this.region.object3d.parent.position, observed.position);
-      dir.divideScalar(dir.length()).multiplyScalar(radius);
-      return observed.position.clone().add(dir)
-    }
-    else return false;
-  }
-
-  notify(observed) {
-    return {
-      'trigger': this,
-      'observer': this.parent,
-      'observed': observed
-    }
-  }
-}

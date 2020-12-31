@@ -1,9 +1,6 @@
-import Actor from "./Actor.js"
-import { createSphere } from "./prims.js"
-import Component from "./components/Component.js"
-import { Nimbus } from "./triggers/Trigger.js";
-import RegionTriggerSphere from "./triggers/RegionTriggerSphere.js";
-import Penguin from "./Penguin.js";
+import { Actor, Penguin, Triggers } from "./index.js"
+import { createSphere } from "../prims.js"
+import Component from "./components/Component.js";
 
 export default class Pheromone extends Actor {
 
@@ -17,7 +14,11 @@ export default class Pheromone extends Actor {
 			options.opacity || 1
 		));
 		this.addComponent(PheromoneBehavior, options.delay)
-		this.setTrigger(Nimbus, RegionTriggerSphere, { radius: 2 }, [Penguin])
+		this.setTrigger(Triggers.Nimbus, Triggers.Regions.Sphere, { radius: 7 }, [Penguin])
+	}
+
+	get age() {
+		return this.getComponent(PheromoneBehavior).age;
 	}
 }
 
@@ -26,7 +27,7 @@ class PheromoneBehavior extends Component {
 	constructor(actor, options = []) {
 		super(actor);
 		const [delay] = options;
-		this.delay = delay || 500;
+		this.delay = delay || 1000;
 		this.counter = 0;
 	}
 
@@ -36,5 +37,9 @@ class PheromoneBehavior extends Component {
 			this.actor.sim.removeActor(this.actor);
 		}
 		this.counter++;
+	}
+
+	get age() {
+		return this.delay - this.counter;
 	}
 }

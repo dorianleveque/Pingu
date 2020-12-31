@@ -1,6 +1,5 @@
-import * as THREE from "../../lib/three.module.js";
-import { createCylinder } from "../prims.js";
-import { rad2deg } from "../utils.js";
+import * as THREE from "../../../../lib/three.module.js";
+import { createCylinder } from "../../../Prims.js"
 import RegionTrigger from "./RegionTrigger.js"
 
 export default class RegionTriggerAngularArea extends RegionTrigger {
@@ -21,7 +20,7 @@ export default class RegionTriggerAngularArea extends RegionTrigger {
   test(observedPosition) {
     const PO = new THREE.Vector3();
     PO.subVectors(observedPosition.clone(), this.object3d.parent.position);
-    
+
     const direction = new THREE.Vector3(0, 0, 1);
     direction.applyQuaternion(this.object3d.parent.quaternion);
     const angle = direction.angleTo(PO.clone().divideScalar(PO.length()))

@@ -126,5 +126,3 @@ export function loadObj(nom, objPath, mtlPath) {
 	});
 	return groupe;
 }
-
-THREE.ObjectLoader

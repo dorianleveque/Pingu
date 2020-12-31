@@ -1,4 +1,5 @@
 import * as THREE from "../lib/three.module.js";
+import { Actor, Triggers } from "./actors/index.js";
 
 /**
  * Classe Sim
@@ -26,7 +27,7 @@ export default class Sim {
 		document.body.appendChild(this.renderer.domElement);
 
 		this.scene = new THREE.Scene();
-		
+
 		this.scene.add(new THREE.AmbientLight(0xffffff, 1.0));
 		this.scene.add(new THREE.GridHelper(100, 20));
 
@@ -60,8 +61,10 @@ export default class Sim {
 	}
 
 	addActor(actor) {
-		this.actors.push(actor);
-		//this.scene.add()
+		if (actor instanceof Actor) {
+			this.actors.push(actor);
+		}
+		else throw new Error("The actor passed in parameter isn't a actor class")
 	}
 
 	findActor(actor) {
@@ -78,7 +81,8 @@ export default class Sim {
 	}
 
 	addTrigger(trigger) {
-		this.triggers.push(trigger);
+		if (trigger instanceof Triggers.Trigger)
+			this.triggers.push(trigger);
 	}
 
 	findTrigger(trigger) {

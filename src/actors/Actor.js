@@ -1,5 +1,6 @@
-import * as THREE from "../lib/three.module.js";
-import Sim from "./Sim.js";
+import * as THREE from "../../lib/three.module.js";
+import Sim from "../Sim.js";
+import { Components, Triggers } from "./index.js";
 
 /**
  * Classe Acteur
@@ -10,7 +11,7 @@ export default class Actor {
 	/**
 	 * @param {Sim} sim simulation
 	 */
-	constructor(sim, mass = 1, velocityMax = 8, forceMax = 1) {
+	constructor(sim, mass = 1, velocityMax = 5, forceMax = 50) {
 		this.sim = sim;
 		this.object3d = null;
 		this.components = []
@@ -99,11 +100,19 @@ export default class Actor {
 
 	/**
 	 * Add component behavior
+	 * replace if an already one of the same type exist
 	 * @param {ComponentClass} componentClass component class
 	 * @param {Object} options options
 	 */
 	addComponent(componentClass, ...options) {
-		this.components.push(new componentClass(this, options));
+		const component = new componentClass(this, options);
+		if (component instanceof Components.Component) {
+			if (this.getComponent(componentClass) != null) {
+				this.removeComponent(componentClass);
+			}
+			this.components.push(component);
+		}
+		else throw new Error("The component passed isn't a component class")
 	}
 
 	/**
@@ -143,15 +152,18 @@ export default class Actor {
 	 * @returns Trigger
 	 */
 	setTrigger(triggerType, regionClass, regionOptions = {}, observedFilter = []) {
-		// check if a trigger of this type is already set for this actor
-		if (this.trigger.hasOwnProperty(triggerType)) {
-			this.sim.removeTrigger(this.trigger[triggerType]);
+		const trigger = new triggerType(this, regionClass, regionOptions, observedFilter);
+		if (trigger instanceof Triggers.Trigger) {
+			// check if a trigger of this type is already set for this actor
+			if (this.trigger.hasOwnProperty(triggerType)) {
+				this.sim.removeTrigger(this.trigger[triggerType]);
+			}
+			else {
+				this.sim.addTrigger(trigger);
+				this.trigger[triggerType] = trigger;
+			}
 		}
-		else {
-			const newTrigger = new triggerType(this, regionClass, regionOptions, observedFilter);
-			this.sim.addTrigger(newTrigger);
-			this.trigger[triggerType] = newTrigger;
-		}
+		else throw new Error("The trigger class passed in parameter isn't a trigger class")
 	}
 
 	getTrigger(triggerType = null) {

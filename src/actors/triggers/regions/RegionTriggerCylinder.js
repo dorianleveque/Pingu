@@ -1,5 +1,5 @@
-import { Vector3 } from "../../lib/three.module.js";
-import { createCylinder } from "../prims.js";
+import * as THREE from "../../../../lib/three.module.js";
+import { createCylinder } from "../../../Prims.js"
 import RegionTrigger from "./RegionTrigger.js"
 
 export default class RegionTriggerCylinder extends RegionTrigger {
@@ -13,7 +13,7 @@ export default class RegionTriggerCylinder extends RegionTrigger {
 
   /**
    * Test if observed position is in the area
-   * @param {Vector3} observe observed position
+   * @param {THREE.Vector3} observe observed position
    */
   test(observedPosition) {
     return (Math.pow(observedPosition.x - this.object3d.parent.position.x, 2) + Math.pow(observedPosition.z - this.object3d.parent.position.z, 2)) < Math.pow(this.radius, 2) && Math.abs(observedPosition.y - this.object3d.parent.position.y) < this.height / 2;

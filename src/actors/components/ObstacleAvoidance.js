@@ -1,12 +1,12 @@
-import * as THREE from "../../lib/three.module.js";
+import * as THREE from "../../../lib/three.module.js";
 import Component from "./Component.js"
 import Rock from "../Rock.js"
+import Awareness from "./Awareness.js";
 
 export default class ObstacleAvoidance extends Component {
 
   constructor(actor, options = []) {
     super(actor);
-    this.typeClass = options;
     this.coef = 0.5;
   }
 
@@ -26,7 +26,7 @@ export default class ObstacleAvoidance extends Component {
       }
     });*/
 
-    const raycaster = new THREE.Raycaster(this.actor.position, this.actor.velocity.clone().normalize(), 0.1, this.actor.velocity);
+    /*const raycaster = new THREE.Raycaster(this.actor.position, this.actor.velocity.clone().normalize(), 0.1, this.actor.velocity);
     raycaster.intersectObjects(this.actor.sim.actors.filter(actor => actor.constructor.name === "Rock").map(actor => actor.object3d)).forEach(element => {
       const { distance, object } = element;
       if (distance < 15) {
@@ -54,10 +54,63 @@ export default class ObstacleAvoidance extends Component {
         // Le coef va réguler la force à appliquer. Plus il est grand plus le pingouin va dégager. J'ai pas vraiment trouvé de formule adéquate donc il faut y aller à tatillons. Coef > 0 par contre.
       }
 
-    });;
+    });;*/
 
+    // test 1
+    /*const Fo = new THREE.Vector3();
 
+    this.actor.getComponent(Awareness).getAll()
+    .filter(e => e.actor instanceof Rock && e.awareness > 0.5)
+    .forEach(e => {
+      // On prend P le point du pingouin, P' sa prochaine position et C le centre de l'obstacle
+      const PP_ = this.actor.position.clone().addScaledVector(this.actor.velocity, dt);
+      const PC = new THREE.Vector3();
+      PC.subVectors(e.actor.position, this.actor.position); // (x1; y1) // => Connu
 
+      // Calcul du vecteur orthogonal
+      const orthoPC = e.actor.position.clone().reflect(PC).divideScalar(PC.length())
+
+      const projection = PC.dot(PP_);
+      //Vecteur orthogonal à PC = (1; -x1 / y1)
+      // Rendre ce vecteur unitaire
+      //Vecteur orthogonal unitaire = Vecteur orthogonal à PC / norme(Vecteur orthogonal à PC)
+      // On va pouvoir projeter PP' dessus => Produit scalaire 
+      //Projection = PC produit scalaire PP'
+
+      // La projection peut être positive ou négative donc c'est parfait.
+      // On peut utiliser ça pour faire changer le sens de l'évitement
+      // Vecteur force à appliquer = (Coef / Projection) * Vecteur orthogonal unitaire
+      Fo.add(orthoPC.multiplyScalar((e.actor.object3d.geometry.boundingSphere.radius + 1) / projection));
+      if (e.actor.object3d.material) e.actor.object3d.material.color.setRGB(1, 0, 0)
+    })
+    this.actor.applyForce(Fo);*/
+    
+
+    // test 2
+    const Fo = new THREE.Vector3();
+
+    const e = this.actor.getComponent(Awareness).getNearest(Rock)
+    if (e /*&& Math.round(this.actor.velocity.length()) > 0*/) {
+      // On prend P le point du pingouin, P' sa prochaine position et C le centre de l'obstacle
+      const PP_ = this.actor.position.clone().addScaledVector(this.actor.velocity, dt);
+      const PC = new THREE.Vector3();
+      PC.subVectors(e.actor.position, this.actor.position); // (x1; y1) // => Connu
+
+      // Calcul du vecteur orthogonal
+      const orthoPC = e.actor.position.clone().reflect(PC).divideScalar(PC.length())
+
+      const projection = PC.dot(PP_);
+      //Vecteur orthogonal à PC = (1; -x1 / y1)
+      // Rendre ce vecteur unitaire
+      //Vecteur orthogonal unitaire = Vecteur orthogonal à PC / norme(Vecteur orthogonal à PC)
+      // On va pouvoir projeter PP' dessus => Produit scalaire 
+      //Projection = PC produit scalaire PP'
+
+      // La projection peut être positive ou négative donc c'est parfait.
+      // On peut utiliser ça pour faire changer le sens de l'évitement
+      // Vecteur force à appliquer = (Coef / Projection) * Vecteur orthogonal unitaire
+      this.actor.applyForce(orthoPC.multiplyScalar((e.actor.object3d.geometry.boundingSphere.radius + 0.5) / projection));
+    }
   }
 }
 

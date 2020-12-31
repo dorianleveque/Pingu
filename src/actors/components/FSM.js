@@ -23,6 +23,7 @@ export default class FSM extends Component {
   update(dt) {
     const state = this.states[this.currentState];
     if (state.update) state.update.call(this, dt);
+    //console.log(this.currentState)
   }
 
 }

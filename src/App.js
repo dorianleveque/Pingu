@@ -1,39 +1,35 @@
 
 import * as THREE from "../lib/three.module.js";
-import Actor from "./Actor.js"
-import Sim from "./Sim.js"
-import Penguin from "./Penguin.js"
-import Humain from "./Human.js"
-import Rock from "./Rock.js"
-import Grass from "./Grass.js"
-import { createPlane } from "./prims.js"
-import { random, randomRange, getRandCoord } from "./utils.js"
+import Sim from "./Sim.js";
+import { Human, Grass, Rock, Penguin, PenguinReynolds } from "./actors/index.js"
+import { createPlane } from "./Prims.js"
+import { random, randomRange, getRandCoord } from "./Utils.js"
 
 // ======================================================================================================================
 // Spécification of Sim and Actor classes for a specific project
 // ======================================================================================================================
 
 // give for each object in JavaScript a unique id
-(function() {
-	if ( typeof Object.id == "undefined" ) {
-			var id = 0;
+(function () {
+	if (typeof Object.id == "undefined") {
+		var id = 0;
 
-			Object.id = function(o) {
-					if ( typeof o.__uniqueid == "undefined" ) {
-							Object.defineProperty(o, "__uniqueid", {
-									value: ++id,
-									enumerable: false,
-									// This could go either way, depending on your 
-									// interpretation of what an "id" is
-									writable: false
-							});
-					}
-					return o.__uniqueid;
-			};
+		Object.id = function (o) {
+			if (typeof o.__uniqueid == "undefined") {
+				Object.defineProperty(o, "__uniqueid", {
+					value: ++id,
+					enumerable: false,
+					// This could go either way, depending on your 
+					// interpretation of what an "id" is
+					writable: false
+				});
+			}
+			return o.__uniqueid;
+		};
 	}
 })();
 
-export default class Appli extends Sim {
+export default class App extends Sim {
 
 	constructor() {
 		super();
@@ -42,7 +38,7 @@ export default class Appli extends Sim {
 	}
 
 	createScene(params = {}) {
-		const { ground, grassCount, penguinCount, rockCount } = params;
+		const { ground, grassCount, penguinCount, penguinReynoldsCount, rockCount } = params;
 
 		this.groundWidth = ground.width || 100;
 		this.groundDepth = ground.depth || 100;
@@ -54,11 +50,12 @@ export default class Appli extends Sim {
 		this.scene.add(createPlane(this.groundWidth, this.groundDepth));
 
 		// character creation
-		this.placeRandomly(1, Humain);
+		this.placeRandomly(1, Human);
 
 		// place elements on the scene
 		this.placeRandomly(grassCount, Grass);
 		this.placeRandomly(penguinCount, Penguin, this.PenguinCreationCallback);
+		this.placeRandomly(penguinReynoldsCount, PenguinReynolds, this.PenguinCreationCallback);
 		this.placeRandomly(rockCount, Rock, this.RockCreationCallback);
 	}
 
@@ -68,7 +65,7 @@ export default class Appli extends Sim {
 	 */
 	isOutOfGround(actor) {
 		const pos = actor.position;
-		return pos.x < -this.groundWidth/2 || pos.x > this.groundWidth/2 || pos.z < -this.groundDepth/2 || pos.z > this.groundDepth/2;
+		return pos.x < -this.groundWidth / 2 || pos.x > this.groundWidth / 2 || pos.z < -this.groundDepth / 2 || pos.z > this.groundDepth / 2;
 	}
 
 	/**
@@ -100,7 +97,7 @@ export default class Appli extends Sim {
 
 	PenguinCreationCallback(classe, index) {
 		return {
-			mass: 1//randomRange(2.5, 23)
+			mass: randomRange(6, 24)
 		}
 	}
 

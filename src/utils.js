@@ -1,30 +1,30 @@
 // ======================================================================================================================
-// Fonctions utilitaires du projet
+// Utility functions of the project
 // ======================================================================================================================
 
 /**
- * Retourne un nombre aléatoire compris entre la valeur minimale et maximale comprise
- * @param {Number} min Nombre minimal
- * @param {Number} max Nombre maximal
+ * Returns a random number between the minimum and maximum value between
+ * @param {Number} min Minimum number
+ * @param {Number} max Maximum number
  */
 export function randomRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 /**
- * Retourne un nombre aléatoire compris entre 0 et la valeur maximale renseigné
- * @param {Number} value Nombre maximale généré
+ * Returns a random number between 0 and the maximum value entered.
+ * @param {Number} value Maximum number
  */
 export function random(value) {
   return Math.random() * value;
 }
 
 /**
- * Retourne des coordonnées aléatoire
- * @param {Number} minX nombre minimal x
- * @param {Number} maxX nombre maximal x
- * @param {Number} minY nombre minimal y
- * @param {Number} maxY nombre maximal y
+ * Returns random coordinates
+ * @param {Number} minX minimum number x
+ * @param {Number} maxX maximum number x
+ * @param {Number} minY minimum number y
+ * @param {Number} maxY maximum number y
  * @returns {Object} [x, y] 
  */
 export function getRandCoord(minX, maxX, minY, maxY) {
@@ -49,4 +49,12 @@ export function rad2deg(rad) {
  */
 export function deg2rad(deg) {
   return deg * (Math.PI / 180);
+}
+
+/**
+ * Return the average of the number passed in parameters
+ * @param  {...any Number} values 
+ */
+export function average(...values) {
+  return values.reduce((acc, val) => acc + val) / values.length
 }

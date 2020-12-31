@@ -1,10 +1,7 @@
-import * as THREE from "../lib/three.module.js";
-import Actor from "./Actor.js"
+import * as THREE from "../../lib/three.module.js";
 import ControleurCamera from "./ControleurCamera.js"
-import { loadObj } from "./prims.js"
-import { Nimbus } from "./triggers/Trigger.js";
-import Penguin from "./Penguin.js";
-import RegionTriggerSphere from "./triggers/RegionTriggerSphere.js";
+import { Actor, Penguin, Triggers } from "./index.js"
+import { loadObj } from "../Prims.js"
 
 export default class Human extends Actor {
 
@@ -29,11 +26,7 @@ export default class Human extends Actor {
     document.addEventListener("mousemove", (e) => this.controleur.mouseMove(e), false);
     document.addEventListener("mousedown", (e) => this.controleur.mouseDown(e), false);
 
-    this.setTrigger(Nimbus, RegionTriggerSphere, { radius: 8 }, [Penguin])
-  }
-
-  onTriggerStay(type, actor, coef) {
-    //console.log(type, actor, coef)
+    this.setTrigger(Triggers.Nimbus, Triggers.Regions.Sphere, { radius: 15 }, [Penguin])
   }
 
   update(dt) {
