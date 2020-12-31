@@ -6,9 +6,11 @@
 
 </br></br>
 
+![alt text](assets/Screenshot.png)
+
 # 📝 Description of the project
 
-Project realised in the IEVA module (Interaction with Virtual or Augmented Reality Environments) of our dual degree SIIA (Intelligent and Autonomous Interactive System).
+Project realised by `Elouan EVEN` and `Dorian LEVEQUE` in the IEVA module (Interaction with Virtual or Augmented Reality Environments) of our dual degree SIIA (Intelligent and Autonomous Interactive System).
 This project was about successfully setting up an autonomous and interactive environment.
 
 You are projected into a virtual world in low-polygon in the middle of a penguin colony. 
@@ -18,6 +20,10 @@ In this colony, there are 10 penguins with a predefined programming and 10 other
 If you get too close to the penguins (not Reynolds) and he sees you, he will flee as far away from you as possible. 
 As soon as they are hungry, they will look for grass to eat.
 They will be attracted to the pheromones released by other penguins to follow them and will stop in front of them as soon as they get close enough. 
+
+![alt text](assets/Screenshot1.png)
+
+A debugger display can be activate with the `n` key to help you to see the different area of trigger.
 
 # 📕 Report
 The project report is available here (soon)
