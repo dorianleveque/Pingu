@@ -97,7 +97,7 @@ export default class App extends Sim {
 
 	PenguinCreationCallback(classe, index) {
 		return {
-			mass: randomRange(6, 24)
+			mass: (classe == Penguin) ? randomRange(12, 24) : randomRange(2, 8) 
 		}
 	}
 

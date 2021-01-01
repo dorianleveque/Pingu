@@ -1,13 +1,14 @@
 import * as THREE from "../../../lib/three.module.js";
 import Component from "./Component.js"
 import Rock from "../Rock.js"
-import Awareness from "./Awareness.js";
 
 export default class ObstacleAvoidance extends Component {
 
   constructor(actor, options = []) {
     super(actor);
-    this.coef = 0.5;
+    const [obstacles, coef] = options;
+    this.obstacles = obstacles;
+    this.coef = coef || 0.5;
   }
 
   update(dt) {
@@ -87,10 +88,10 @@ export default class ObstacleAvoidance extends Component {
     
 
     // test 2
-    const Fo = new THREE.Vector3();
+    /*const Fo = new THREE.Vector3();
 
     const e = this.actor.getComponent(Awareness).getNearest(Rock)
-    if (e /*&& Math.round(this.actor.velocity.length()) > 0*/) {
+    if (e && Math.round(this.actor.velocity.length()) > 0) {
       // On prend P le point du pingouin, P' sa prochaine position et C le centre de l'obstacle
       const PP_ = this.actor.position.clone().addScaledVector(this.actor.velocity, dt);
       const PC = new THREE.Vector3();
@@ -110,7 +111,30 @@ export default class ObstacleAvoidance extends Component {
       // On peut utiliser ça pour faire changer le sens de l'évitement
       // Vecteur force à appliquer = (Coef / Projection) * Vecteur orthogonal unitaire
       this.actor.applyForce(orthoPC.multiplyScalar((e.actor.object3d.geometry.boundingSphere.radius + 0.5) / projection));
+    }*/
+
+    const obstacle = this.obstacles.filter(e => e instanceof Rock).sort((a, b) => this.actor.position.distanceTo(a.position) - this.actor.position.distanceTo(b.position))[0] || null;
+
+    if (obstacle) {
+      const PP_ = this.actor.position.clone().addScaledVector(this.actor.velocity, dt);
+      const PC = new THREE.Vector3();
+      PC.subVectors(obstacle.position, this.actor.position);
+      
+      const r = obstacle.object3d.geometry.boundingSphere.radius;
+      const d = 1.2;
+
+      const projection = PC.dot(PP_);
+      if (projection < r+d) {
+        const orthoPC = new THREE.Vector3()
+        orthoPC.reflect(PC).divideScalar(PC.length())
+        const coef = PP_.length() * this.actor.velocity.length();
+        orthoPC.multiplyScalar((r - projection) / r * coef)
+
+        this.actor.applyForce(orthoPC)
+      }
     }
+
+
   }
 }
 

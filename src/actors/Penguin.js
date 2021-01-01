@@ -8,12 +8,13 @@ export default class Penguin extends Actor {
 		super(sim, options.mass);
 		this.setObject3d(loadObj("tux1", "assets/obj/pingouin/penguin.obj", "assets/obj/pingouin/penguin.mtl"));
 		this.InArea = []
+		this.InFocus = []
 
 		// Penguin Components
 		this.addComponent(Components.Awareness);
 		this.addComponent(Components.ReleasePheromone);
 		this.addComponent(Components.Hunger);
-		//this.addComponent(Components.ObstacleAvoidance);
+		this.addComponent(Components.ObstacleAvoidance, this.InFocus);
 		this.addComponent(Components.FSM, {
 			"Wander": {
 				"enter": () => {
@@ -78,12 +79,19 @@ export default class Penguin extends Actor {
 
 					// hungry
 					this.actionWhenHungry();
+					
+					// stop near a penguin
+					if (this.InArea.find(e => e instanceof Penguin)) {
+						this.getComponent(Components.FSM).transition("Stop")
+					}
+					else {
+						// search the farthest pheromone and go there
+						const pheromone = this.getComponent(Components.Awareness).getAll()
+							.filter(e => e.actor instanceof Pheromone)
+							.sort((a, b) => b.actor.age - a.actor.age)[0] || null;
+						if (pheromone) this.target = pheromone.actor.position;
+					}
 
-					// search the farthest pheromone and go there
-					const pheromone = this.getComponent(Components.Awareness).getAll()
-					.filter(e => e.actor instanceof Pheromone)
-					.sort((a, b) => b.actor.age - a.actor.age)[0] || null;
-					if (pheromone) this.target = pheromone.actor.position;
 				},
 				"exit": () => {
 					this.removeComponent(Components.Arrive);
@@ -98,7 +106,7 @@ export default class Penguin extends Actor {
 				"update": () => {
 					// check human
 					this.actionWhenHumanAround();
-					
+
 					// hungry
 					this.actionWhenHungry();
 
@@ -151,7 +159,7 @@ export default class Penguin extends Actor {
 
 		// Trigger
 		this.setTrigger(Triggers.Nimbus, Triggers.Regions.Sphere, { radius: 4 }, [Penguin]);
-		this.setTrigger(Triggers.Focus, Triggers.Regions.AngularArea, { radius: 8, height: 3, theta: 7 * Math.PI / 8 });
+		this.setTrigger(Triggers.Focus, Triggers.Regions.AngularArea, { radius: 8, height: 3, theta: 9 * Math.PI / 10 });
 		this.setTrigger(Triggers.Area, Triggers.Regions.Cylinder, { radius: 1, height: 3 }, [Penguin, Grass])
 	}
 
@@ -160,7 +168,7 @@ export default class Penguin extends Actor {
 		if (this.isPheromoneOfOthers(observed)) {
 			switch (type) {
 				case "Nimbus": this.getComponent(Components.Awareness).addInNimbus(observed, coef); break;
-				case "Focus": this.getComponent(Components.Awareness).addInFocus(observed, coef); break;
+				case "Focus": this.getComponent(Components.Awareness).addInFocus(observed, coef); this.InFocus.push(observed); break;
 				case "Area": this.InArea.push(observed); break;
 			}
 		}
@@ -179,7 +187,7 @@ export default class Penguin extends Actor {
 		if (this.isPheromoneOfOthers(observed)) {
 			switch (type) {
 				case "Nimbus": this.getComponent(Components.Awareness).removeInNimbus(observed, coef); break;
-				case "Focus": this.getComponent(Components.Awareness).removeInFocus(observed, coef); break;
+				case "Focus": this.getComponent(Components.Awareness).removeInFocus(observed, coef); this.InFocus.splice(this.InFocus.indexOf(observed), 1); break;
 				case "Area": this.InArea.splice(this.InArea.indexOf(observed), 1); break;
 			}
 		}
