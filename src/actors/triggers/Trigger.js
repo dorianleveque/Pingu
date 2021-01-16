@@ -99,7 +99,7 @@ export default class Trigger {
       "observed": this.parent
    * }
    */
-  notify(changed) {
+  notify(observed) {
     throw new Error('This function must be implemented');
   }
 

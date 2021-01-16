@@ -4,11 +4,12 @@ export default class RegionTrigger {
     this.object3d = null;
     this.trigger = null;
     this.color = options.color || 0xffffff
+    this.v = options.visible || false;
   }
 
   setTrigger(trigger) {
     this.trigger = trigger;
-    this.visible = false;
+    this.visible = this.v;
     const parentMaterial = this.trigger.parent.object3d.material;
     if (parentMaterial) this.object3d.material.color = parentMaterial.color || 0xffffff
     this.trigger.parent.object3d.attach(this.object3d);

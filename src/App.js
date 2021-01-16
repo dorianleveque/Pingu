@@ -1,7 +1,7 @@
 
 import * as THREE from "../lib/three.module.js";
 import Sim from "./Sim.js";
-import { Human, Grass, Rock, Penguin, PenguinReynolds } from "./actors/index.js"
+import { Human, Grass, Rock, Penguin, BabyPenguin } from "./actors/index.js"
 import { createPlane } from "./Prims.js"
 import { random, randomRange, getRandCoord } from "./Utils.js"
 
@@ -38,7 +38,7 @@ export default class App extends Sim {
 	}
 
 	createScene(params = {}) {
-		const { ground, grassCount, penguinCount, penguinReynoldsCount, rockCount } = params;
+		const { ground, grassCount, penguinCount, babyPenguinCount, rockCount } = params;
 
 		this.groundWidth = ground.width || 100;
 		this.groundDepth = ground.depth || 100;
@@ -55,7 +55,7 @@ export default class App extends Sim {
 		// place elements on the scene
 		this.placeRandomly(grassCount, Grass);
 		this.placeRandomly(penguinCount, Penguin, this.PenguinCreationCallback);
-		this.placeRandomly(penguinReynoldsCount, PenguinReynolds, this.PenguinCreationCallback);
+		this.placeRandomly(babyPenguinCount, BabyPenguin, this.PenguinCreationCallback);
 		this.placeRandomly(rockCount, Rock, this.RockCreationCallback);
 	}
 
@@ -90,8 +90,8 @@ export default class App extends Sim {
 
 	RockCreationCallback(classe, index) {
 		return {
-			radius: randomRange(0.5, 2),
-			detail: Math.ceil(random(2))
+			radius: randomRange(0.5, 1),
+			detail: Math.ceil(randomRange(1, 3))
 		}
 	}
 

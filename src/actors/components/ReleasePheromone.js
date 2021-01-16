@@ -7,11 +7,12 @@ export default class ReleasePheromone extends Component {
     super(actor);
     const [randomRange] = options;
     this.randomRange = randomRange || 0.02;
+    this.triggerVisible = false;
   }
 
   update() {
     if (Math.random() < this.randomRange) {
-      const pheromone = new Pheromone(this.actor.sim, this.actor);
+      const pheromone = new Pheromone(this.actor.sim, this.actor, { 'triggerVisible': this.triggerVisible });
       pheromone.position = this.actor.position;
       this.actor.sim.addActor(pheromone);
     }
