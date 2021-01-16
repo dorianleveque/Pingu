@@ -16,7 +16,7 @@ export default class Area extends Trigger {
       dir.divideScalar(dir.length()).multiplyScalar(radius);
       return observed.position.clone().add(dir)
     }
-    else return false;
+    else return observed.position;
   }
 
   notify(observed) {

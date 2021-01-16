@@ -26,7 +26,7 @@ They will be attracted to the pheromones released by other penguins to follow th
 A debugger display can be activate with the `n` key to help you to see the different area of trigger.
 
 # 📕 Report
-The project report is available here (soon)
+The project report is available [here](./Rapport_LEVEQUE_EVEN.pdf)
 
 # 📂 Contents of the repository
 

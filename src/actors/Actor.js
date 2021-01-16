@@ -11,7 +11,7 @@ export default class Actor {
 	/**
 	 * @param {Sim} sim simulation
 	 */
-	constructor(sim, mass = 1, velocityMax = 5, forceMax = 50) {
+	constructor(sim, mass = 1, velocityMax = 10, forceMax = 50) {
 		this.sim = sim;
 		this.object3d = null;
 		this.components = []
@@ -166,6 +166,11 @@ export default class Actor {
 		else throw new Error("The trigger class passed in parameter isn't a trigger class")
 	}
 
+	/**
+	 * Return all the triggers associted with this actor
+	 * or return the trigger with the corresponding type (if specified)
+	 * @param {Trigger} triggerType trigger class
+	 */
 	getTrigger(triggerType = null) {
 		return (triggerType) ? this.trigger[triggerType] || null : Object.values(this.trigger);
 	}

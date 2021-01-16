@@ -1,0 +1,32 @@
+@startuml sfm
+
+[*] -[#Black]> Wander
+Wander#MediumPurple -left[#HotPink]-> Flee: Awa Humain > 0.5\ntarget = human
+Wander -up[#Green]-> SearchFood: food level < 0.4
+Wander -right[#CadetBlue]-> FollowPheromone: Awa Pheromone > 0.2\ntarget = Pheromone
+Wander -down[#Orange]-> GoToPenguin: Awa Penguin > 0.66\ntarget = Penguin
+
+SearchFood#LightGreen -[#HotPink]> Flee: Awa Humain > 0.5\ntarget = human
+SearchFood -[#DimGray]> Stop: Grass targeted\nin Area
+
+FollowPheromone#LightBlue -[#HotPink]> Flee: Awa Humain > 0.5\ntarget = human
+FollowPheromone -[#Orange]> GoToPenguin: Awa Penguin > 0.66\ntarget = Penguin
+FollowPheromone -[#Green]> SearchFood: food level < 0.4
+FollowPheromone -[#DimGray]> Stop: Penguin in Area
+
+GoToPenguin#Orange -[#HotPink]> Flee: Awa Humain > 0.5\ntarget = human
+GoToPenguin -[#Green]> SearchFood: food level < 0.4
+GoToPenguin -[#DimGray]> Stop: Penguin in Area
+
+Stop#LightGray -[#HotPink]> Flee: Awa Humain > 0.5\ntarget = human
+Stop -[#Purple]> Wander: wait between\n1s and 3s
+
+Flee#LightPink -[#Purple]-> Wander: Awa Human = 0
+
+Wander: Choisi une destination\naléatoire et s'y rend.
+SearchFood: Cherche de la nourriture\nen s'y rendant de manière aléatoire.\nPuis lorsqu'il en a trouvé une,\nil s'y rend pour la manger.
+FollowPheromone: Lorsqu'il rencontre des\nPheromones d'un autre pingouin,\nil prend en target la Pheromone\nla moins agée et s'y rend.
+GoToPenguin: Se rend vers le pingouin détecté.
+Stop: Le pingouin s'arrête.
+Flee: Le pingouin fuit l'humain.
+@enduml

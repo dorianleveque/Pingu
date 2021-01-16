@@ -1,5 +1,5 @@
 import * as THREE from "../../../lib/three.module.js";
-import { Penguin, PenguinReynolds } from "../index.js";
+import { Penguin, BabyPenguin } from "../index.js";
 import Component from "./Component.js"
 
 export class Cohesion extends Component {
@@ -25,7 +25,7 @@ export class Separation extends Component {
   }
 
   update(dt) {
-    const penguins = this.inFocus.filter(e => e instanceof Penguin || e instanceof PenguinReynolds)
+    const penguins = this.inFocus.filter(e => e instanceof Penguin || e instanceof BabyPenguin)
     if (penguins.length > 0) {
       const penguinsPositionSumed = new THREE.Vector3();
 
@@ -51,7 +51,7 @@ export class Alignment extends Component {
   }
 
   update(dt) {
-    const penguins = this.inFocus.filter(e => e instanceof Penguin || e instanceof PenguinReynolds)
+    const penguins = this.inFocus.filter(e => e instanceof Penguin || e instanceof BabyPenguin)
     if (penguins.length > 0) {
       const ViSumed = new THREE.Vector3();
   

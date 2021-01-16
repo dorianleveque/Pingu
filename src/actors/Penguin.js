@@ -7,8 +7,8 @@ export default class Penguin extends Actor {
 	constructor(sim, options = {}) {
 		super(sim, options.mass);
 		this.setObject3d(loadObj("tux1", "assets/obj/pingouin/penguin.obj", "assets/obj/pingouin/penguin.mtl"));
-		this.InArea = []
-		this.InFocus = []
+		this.InArea = [];
+		this.InFocus = [];
 
 		// Penguin Components
 		this.addComponent(Components.Awareness);
@@ -52,11 +52,11 @@ export default class Penguin extends Actor {
 					this.actionWhenHumanAround();
 
 					// search grass
-					const grass = this.isThereAround(Grass, 0.66)
+					const grass = this.isThereAround(Grass, 0.66);
 					if (grass) this.target = grass.position;
 					if (this.InArea.find(e => e == grass)) {
-						setTimeout(this.eatAction.bind(this), randomRange(500, 1000), grass)
-						this.getComponent(Components.FSM).transition("Stop")
+						setTimeout(this.eatAction.bind(this), randomRange(500, 1000), grass);
+						this.getComponent(Components.FSM).transition("Stop");
 					}
 				},
 				"exit": () => {
@@ -82,7 +82,7 @@ export default class Penguin extends Actor {
 					
 					// stop near a penguin
 					if (this.InArea.find(e => e instanceof Penguin)) {
-						this.getComponent(Components.FSM).transition("Stop")
+						this.getComponent(Components.FSM).transition("Stop");
 					}
 					else {
 						// search the farthest pheromone and go there
@@ -122,45 +122,50 @@ export default class Penguin extends Actor {
 			},
 			"Stop": {
 				"enter": () => {
-					this.addComponent(Components.Seek)
-					this.addComponent(Components.Arrive)
-					setTimeout(this.stopAction.bind(this), randomRange(1000, 3000))
+					this.addComponent(Components.Seek);
+					this.addComponent(Components.Arrive);
+					setTimeout(this.stopAction.bind(this), randomRange(1000, 3000));
 				},
 				"update": () => {
 					// check human
 					this.actionWhenHumanAround();
 
 					if (this.InArea.find(e => e instanceof Penguin)) {
-						this.addComponent(Components.Arrive, 8, 1.5);
+						this.addComponent(Components.Arrive, 10, 1.5);
 					}
 				},
 				"exit": () => {
-					this.removeComponent(Components.Arrive)
-					clearTimeout(this.stopAction)
-					clearTimeout(this.eatAction)
+					this.removeComponent(Components.Arrive);
+					clearTimeout(this.stopAction);
+					clearTimeout(this.eatAction);
 				}
 			},
 			"Flee": {
 				"enter": () => {
-					this.forceMax = 100 // give an helping hand to to go quickly
+					this.forceMax = 100; // give an helping hand to to go quickly
 					this.addComponent(Components.AbruptDeparture);
 					this.addComponent(Components.Flee);
 				},
 				"update": () => {
-					if (this.isThereAround(Human, 0) == null) this.getComponent(Components.FSM).transition("Wander");
+					const human = this.isThereAround(Human, 0);
+					if (human == null) this.getComponent(Components.FSM).transition("Wander");
+					else this.InArea.filter(actor => actor instanceof Penguin).forEach(penguin => {
+						penguin.target = human.position;
+						penguin.getComponent(Components.FSM).transition("Flee");
+					})
 				},
 				"exit": () => {
-					this.forceMax = 50
-					this.removeComponent(Components.Flee)
-					this.removeComponent(Components.AbruptDeparture)
+					this.forceMax = 50;
+					this.removeComponent(Components.Flee);
+					this.removeComponent(Components.AbruptDeparture);
 				}
 			}
 		}, "Wander")
 
 		// Trigger
-		this.setTrigger(Triggers.Nimbus, Triggers.Regions.Sphere, { radius: 4 }, [Penguin]);
+		this.setTrigger(Triggers.Nimbus, Triggers.Regions.Sphere, { radius: 6 }, [Penguin]);
 		this.setTrigger(Triggers.Focus, Triggers.Regions.AngularArea, { radius: 8, height: 3, theta: 9 * Math.PI / 10 });
-		this.setTrigger(Triggers.Area, Triggers.Regions.Cylinder, { radius: 1, height: 3 }, [Penguin, Grass])
+		this.setTrigger(Triggers.Area, Triggers.Regions.Cylinder, { radius: 1, height: 3 }, [Penguin, Grass]);
 	}
 
 	// Triggers Event
@@ -194,7 +199,7 @@ export default class Penguin extends Actor {
 	}
 
 	stopAction() {
-		this.getComponent(Components.FSM).transition("Wander")
+		this.getComponent(Components.FSM).transition("Wander");
 	}
 
 	eatAction(target) {
@@ -212,7 +217,7 @@ export default class Penguin extends Actor {
 	}
 
 	actionWhenHumanAround() {
-		const human = this.isThereAround(Human, 0.5)
+		const human = this.isThereAround(Human, 0.5);
 		if (human) {
 			this.target = human.position;
 			this.getComponent(Components.FSM).transition("Flee");
@@ -221,7 +226,7 @@ export default class Penguin extends Actor {
 
 	actionWhenHungry() {
 		if (this.getComponent(Components.Hunger).isHungry()) {
-			this.getComponent(Components.FSM).transition("SearchFood")
+			this.getComponent(Components.FSM).transition("SearchFood");
 		}
 	}
 

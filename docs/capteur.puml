@@ -1,0 +1,123 @@
+@startuml
+
+class Sim {
+  + renderer
+  + scene
+  + horloge: Number
+  + chrono
+
+  + init(params)
+  + createScene(params)
+  + update()
+  + isOutOfGround(Actor): Boolean
+  + addActor()
+  + findActor(): Actor
+  + removeActor()
+  + addTrigger()
+  + findTrigger(): Trigger
+  + removeTrigger()
+}
+
+class Component {
+  + constructor(actor)
+  + update(dt)
+}
+
+class Actor {
+  + velocityMax: Number
+  + forceMax: Number
+  + mass: Number
+  + position: Number
+  + orientation: Number
+  + visible: Boolean
+  + setObject3d(THREE.Object3d)
+  + update(dt)
+  + isOutOfGround(): Boolean
+  + applyForce(THREE.Vector3)
+  + addComponent(componentType, options)
+  + removeComponent(componentType)
+  + getComponent(componentType)
+  + setTrigger(triggerType, regionType, regionOptions={}, observedFilter=[])
+  + getTrigger(triggerType=null)
+  + onTriggerEnter(triggerType, observed, coef)
+  + onTriggerStay(triggerType, observed, coef)
+  + onTriggerExit(triggerType, observed, coef)
+}
+
+class Trigger <<abstract>> {
+  + observedFilter: Array<ActorClass>
+  + diff(previousChanged, newChanged)
+  + setRegion(regionType, options={})
+  + eval()
+  + coef(observed)
+  + testOnObserved(observed)
+  + notify(observed)
+  + addObserved(observed)
+  + findObserved(observed): Actor
+  + removeObserved(observed)
+}
+
+class Nimbus {
+
+  + notify(observed): Object
+  + coef(observed): Number
+}
+class Focus {
+
+  + notify(observed): Object
+  + coef(observed): Number
+}
+class Area {
+
+  + notify(observed): Object
+  + testOnObserved(observed): THREE.Vector3
+}
+
+
+class RegionTrigger {
+  + object3d
+  + test(THREE.Vector3): Boolean
+}
+
+class RegionTriggerAngularArea {
+  + object3d
+  + test(THREE.Vector3): Boolean
+}
+
+class RegionTriggerSphere {
+  + object3d
+  + test(THREE.Vector3): Boolean
+}
+
+class RegionTriggerCylinder {
+  + object3d
+  + test(THREE.Vector3): Boolean
+}
+
+Sim "1" -down- "1" Actor: sim
+Sim "1" *-down- "*" Actor: actors
+Sim "1" *- "*" Trigger: triggers
+Sim "1" *- "1" THREE.Scene: scene
+Sim "1" *- "1" THREE.WebGLRenderer: renderer
+Sim "1" *- "1" THREE.Clock: chrono
+
+Actor "1" *-- "*" Component: components
+Actor "1" -- "1" THREE.Object3d: object3d
+Actor "1" *-right- "1" THREE.Vector3: velocity
+Actor "1" *-right- "1" THREE.Vector3: acceleration
+Actor "1" *-right- "1" THREE.Vector3: target
+Actor "1" -left-* "1" Trigger: parent
+Actor "*" -left- "1" Trigger: observed
+Actor "*" -left- "1" Trigger: previousObserved
+Actor "1" --- "*" Trigger: trigger
+
+Trigger <|-up- Nimbus
+Trigger <|-up- Focus
+Trigger <|-up- Area
+
+Trigger "1" *-- "1" RegionTrigger: region
+
+RegionTrigger <|-- RegionTriggerSphere
+RegionTrigger <|-- RegionTriggerCylinder
+RegionTrigger <|-- RegionTriggerAngularArea
+@enduml

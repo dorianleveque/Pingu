@@ -2,7 +2,7 @@ export { default as Actor } from './Actor.js';
 export { default as Grass } from './Grass.js';
 export { default as Human } from './Human.js';
 export { default as Penguin } from './Penguin.js';
-export { default as PenguinReynolds } from './PenguinReynolds.js';
+export { default as BabyPenguin } from './BabyPenguin.js';
 export { default as Pheromone } from './Pheromone.js';
 export { default as Rock } from './Rock.js';
 export { default as Components } from './components/index.js'

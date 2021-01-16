@@ -24,7 +24,7 @@ export class Arrive extends Component {
   constructor(actor, options = []) {
     super(actor);
     const [v0, d0min, d0max] = options;
-    this.v0 = v0 || 8;
+    this.v0 = v0 || 10;
     this.d0min = d0min || 0.8;
     this.d0max = d0max || 5;
   }

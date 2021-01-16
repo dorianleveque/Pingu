@@ -1,7 +1,7 @@
-import { Actor, Penguin, Grass, Components, Triggers, Rock } from "./index.js"
+import { Actor, Penguin, Components, Triggers, Rock } from "./index.js"
 import { loadObj } from "../Prims.js"
 
-export default class PenguinReynolds extends Actor {
+export default class BabyPenguin extends Actor {
 
   constructor(sim, options = {}) {
     super(sim, options.mass);
@@ -15,7 +15,7 @@ export default class PenguinReynolds extends Actor {
     this.addComponent(Components.Arrive, 8, 1.5);
     this.addComponent(Components.Seek);
     this.addComponent(Components.ObstacleAvoidance, this.inFocus);
-    this.setTrigger(Triggers.Focus, Triggers.Regions.AngularArea, { radius: 6, height: 2, theta: 10 * Math.PI / 6 }, [Penguin, PenguinReynolds, Rock]);
+    this.setTrigger(Triggers.Focus, Triggers.Regions.AngularArea, { radius: 6, height: 2, theta: 10 * Math.PI / 6 }, [Penguin, BabyPenguin, Rock]);
   }
 
   // Triggers Event

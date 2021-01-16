@@ -14,7 +14,7 @@ export default class Pheromone extends Actor {
 			options.opacity || 1
 		));
 		this.addComponent(PheromoneBehavior, options.delay)
-		this.setTrigger(Triggers.Nimbus, Triggers.Regions.Sphere, { radius: 7 }, [Penguin])
+		this.setTrigger(Triggers.Nimbus, Triggers.Regions.Sphere, { radius: 7, visible: options.triggerVisible }, [Penguin])
 	}
 
 	get age() {
