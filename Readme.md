@@ -10,7 +10,7 @@
 
 # 📝 Description of the project
 
-Project realised by `Elouan EVEN` and `Dorian LEVEQUE` in the IEVA module (Interaction with Virtual or Augmented Reality Environments) of our dual degree SIIA (Intelligent and Autonomous Interactive System).
+Project realised by [`Elouan EVEN`](https://github.com/Elouan-E) and [`Dorian LEVEQUE`](https://github.com/dorianleveque) in the IEVA module (Interaction with Virtual or Augmented Reality Environments) of our dual degree SIIA (Intelligent and Autonomous Interactive System).
 This project was about successfully setting up an autonomous and interactive environment.
 
 You are projected into a virtual world in low-polygon in the middle of a penguin colony. 
