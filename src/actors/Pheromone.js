@@ -1,5 +1,5 @@
 import { Actor, Penguin, Triggers } from "./index.js"
-import { createSphere } from "../prims.js"
+import { createSphere } from "../Prims.js"
 import Component from "./components/Component.js";
 
 export default class Pheromone extends Actor {
